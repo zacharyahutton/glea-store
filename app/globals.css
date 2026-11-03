@@ -650,3 +650,4 @@ textarea.input { border-radius: 18px; }
 @media (prefers-reduced-motion: reduce) { .xhero__media img { animation: none; } }
 @media (max-width: 479px) { .swatch { width: 46px; height: 46px; padding: 3px; } .swatches { gap: 8px; } }
 .gal__thumb { border-radius: 12px; }
+.footer a:not(.btn), .consent p a, .popup a { text-decoration: underline; text-underline-offset: 2px; }
