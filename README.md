@@ -16,7 +16,7 @@ npm run build && npm start   # production build
 
 - `lib/shopify/` holds a typed Storefront client (`live.ts`), the queries, and a fixture adapter (`fixture/store.json`).
 - When `NEXT_PUBLIC_SHOPIFY_STOREFRONT_TOKEN` is empty, the site runs on the fixture automatically. When it is set, every read goes to the Storefront API with no code change.
-- The fixture is a snapshot of the real store (products, variants, prices, pages, policies, blog). Refresh it with `node scripts/pull-fixture.mjs` then `node scripts/build-fixture.mjs` (needs a signed-in Shopify CLI).
+- The fixture is a snapshot of the real store (products, variants, prices, pages, policies, blog). Refresh it with `bash scripts/pull-fixture.sh` then `python3 scripts/build-fixture.py` (needs a signed-in Shopify CLI with read access).
 - Fixture cart: kept in the browser with real variant IDs. Checkout sends the shopper to a Shopify cart permalink. Live cart: Storefront `cartCreate` / `cartLinesAdd`, then `cart.checkoutUrl`. UTM values are written to cart attributes.
 
 ## Managing content
