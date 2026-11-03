@@ -20,6 +20,7 @@ const nextConfig: NextConfig = {
   async redirects() {
     return [
       { source: "/journal", destination: "/blogs/news", permanent: false },
+      { source: "/collections/frontpage", destination: "/collections/all", permanent: true },
       { source: "/shop", destination: "/collections/all", permanent: false },
       { source: "/pages/contact-1", destination: "/pages/contact", permanent: true },
     ];

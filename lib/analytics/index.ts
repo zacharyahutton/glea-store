@@ -52,7 +52,10 @@ export type Consent = { analytics: boolean; marketing: boolean; at: number };
 const CONSENT_KEY = "glea_consent_v1";
 export function readConsent(): Consent | null {
   try {
-    return JSON.parse(localStorage.getItem(CONSENT_KEY) || "null");
+    const c = JSON.parse(localStorage.getItem(CONSENT_KEY) || "null") as Consent | null;
+    // Global Privacy Control: never allow marketing pixels when the browser sends the opt-out signal.
+    if (c && (navigator as Navigator & { globalPrivacyControl?: boolean }).globalPrivacyControl) c.marketing = false;
+    return c;
   } catch {
     return null;
   }
