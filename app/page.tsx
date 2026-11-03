@@ -92,8 +92,8 @@ export default async function Home() {
         <div className="container split">
           <div data-rv>
             <span className="kicker">Compare</span>
-            <h2 id="cmp-title" className="h1" style={{ margin: "12px 0 20px" }}>Better than a lamp or your phone.</h2>
-            <p className="lead">A bedside lamp lights the room. A phone needs a hand. Glea clips on and lights only your page.</p>
+            <h2 id="cmp-title" className="h1" style={{ margin: "12px 0 20px" }}>Made for reading after dark.</h2>
+            <p className="lead">Glea clips to your book and aims a soft glow at your page, so your hands stay free.</p>
             <div className="btn-row">
               <Link className="btn btn--primary btn--lg" href={pdp}>Shop the light</Link>
               <Link className="btn btn--ghost btn--lg" href={`${pdp}#how-it-works`}>How it works</Link>

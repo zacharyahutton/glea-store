@@ -55,7 +55,7 @@ export function Compare() {
               <th scope="row">{r.label}</th>
               {r.v.map((v, i) => (
                 <td key={i} className={i === 0 ? "is-us" : undefined}>
-                  {v ? <Icon name="check" size={20} label="Yes" /> : <Icon name="x" size={18} label="No" className="muted" />}
+                  {v === true ? <Icon name="check" size={20} label="Yes" /> : <span className="cmp__varies">Varies</span>}
                 </td>
               ))}
             </tr>

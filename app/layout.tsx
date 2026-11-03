@@ -17,7 +17,8 @@ import { JsonLd } from "@/components/ui/JsonLd";
 import { resolveSlot } from "@/lib/media-server";
 
 const dmSans = DM_Sans({ subsets: ["latin"], variable: "--font-dm-sans", display: "swap" });
-const fraunces = Fraunces({ subsets: ["latin"], variable: "--font-fraunces", display: "swap", axes: ["SOFT", "opsz"] });
+// Two static weights only (300 display, 500 headings); no extra axes, to keep the above-the-fold font small.
+const fraunces = Fraunces({ subsets: ["latin"], variable: "--font-fraunces", display: "swap", weight: ["300", "500"], style: ["normal"] });
 
 export const metadata: Metadata = {
   metadataBase: new URL(site.url),

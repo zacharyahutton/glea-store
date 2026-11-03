@@ -58,15 +58,16 @@ export const aplus = [
 ];
 
 export const compare = {
-  heading: "Glea vs the usual ways to read at night",
+  heading: "Glea and other ways to read at night",
   cols: ["Glea", "Bedside lamp", "Phone flashlight"],
+  // Never say other options lack a feature: only state what Glea does; others "Varies" (same rule as GAL-09).
   rows: [
-    { label: "Lights your page, not the room", v: [true, false, false] },
-    { label: "Hands free", v: [true, true, false] },
-    { label: "Rechargeable", v: [true, false, true] },
-    { label: "Clips to your book", v: [true, false, false] },
-    { label: "Fits in a bag", v: [true, false, true] },
-  ],
+    { label: "Lights your page, not the room", v: [true, "varies", "varies"] },
+    { label: "Hands free", v: [true, "varies", "varies"] },
+    { label: "Rechargeable", v: [true, "varies", "varies"] },
+    { label: "Clips to your book", v: [true, "varies", "varies"] },
+    { label: "Fits in a bag", v: [true, "varies", "varies"] },
+  ] as { label: string; v: (boolean | "varies")[] }[],
 };
 
 export const details = [
