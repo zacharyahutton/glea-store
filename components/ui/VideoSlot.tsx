@@ -8,8 +8,8 @@ import type { SlotName } from "@/lib/media";
  * The video starts only after the page has loaded and the browser is idle, never with reduced motion or Save-Data,
  * and fades in over the poster (.3s). Missing mp4 = still image only.
  */
-export function VideoSlot({ base, still, priority = false, sizes = "100vw" }: { base: string; still: SlotName; priority?: boolean; sizes?: string }) {
-  const v = resolveVideo(base, still);
+export function VideoSlot({ base, still, frame, priority = false, sizes = "100vw" }: { base: string; still: SlotName; frame?: string; priority?: boolean; sizes?: string }) {
+  const v = resolveVideo(base, still, frame);
   return (
     <>
       <Media slot={still} image={v.poster} priority={priority} sizes={sizes} />

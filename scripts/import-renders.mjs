@@ -23,6 +23,8 @@ const names = [
   "glea-life-hands-reading", "glea-life-partner-bed", "glea-life-armchair", "glea-life-travel-hotel",
   "glea-life-sofa-blanket", "glea-life-gift-unwrap", "glea-life-ugc-stack",
   "glea-life-how-clip", "glea-life-how-aim", "glea-life-how-read", "glea-og-life",
+  // T-052: card hover images (4:5) and the approved first hero frame (video poster + still fallback)
+  ...COLORS.map((c) => `glea-hover-${c}`), "glea-hover-pair", "hero-frame-01-16x9", "hero-frame-01-9x16",
 ];
 const EXT = [".png", ".webp", ".jpg", ".jpeg"];
 const find = (base) => {

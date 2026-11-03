@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import Image from "next/image";
-import { mediaExists } from "@/lib/media-server";
+import { mediaExists, findDrop } from "@/lib/media-server";
 import { shopify } from "@/lib/shopify";
 import { site, formatMoney } from "@/lib/site";
 import { AiNote } from "@/components/home/Sections";
@@ -34,11 +34,15 @@ export default async function Home() {
     { id: "gift", label: "Gifting", quote: "Six colors, so there is one for every reader on your list.", slot: "LIFE-UGC" as SlotName, chip: "Colors", chipV: "6" },
   ];
   // Product standing at the bottom center of the hero, like the Loftie clock (T-051). Filename-driven: no file, no product.
+  // Card hover images (T-052): glea-hover-black, else the nightstand scene; bundle card: glea-hover-pair, else the pair cutout.
+  const pick = (...b: string[]) => { for (const x of b) { const f = findDrop(x); if (f) return `/media/${f}`; } return null; };
+  const hoverOne = pick("glea-hover-black", "glea-life-nightstand");
+  const hoverTwo = pick("glea-hover-pair", "glea-cut-pair-black-white");
   const heroProduct = mediaExists("glea-hero-product.webp") ? "/media/glea-hero-product.webp" : null;
   return (
     <>
       <section className="lf-hero" aria-labelledby="hero-title">
-        <div className="lf-hero__media"><VideoSlot base="glea-hero" still="HERO-01" priority sizes="100vw" /></div>
+        <div className="lf-hero__media"><VideoSlot base="glea-hero" still="HERO-01" frame="hero-frame-01" priority sizes="100vw" /></div>
         <div className="lf-hero__shade" aria-hidden="true" />
         <div className="lf-hero__in">
           <h1 id="hero-title" className="lf-hero__t">Soft light,<br /> after dark.</h1>
@@ -79,12 +83,12 @@ export default async function Home() {
           <h2 id="pair-title" className="lf-h2 lf-center">A soft glow for every night</h2>
           <div className="lf-pair" data-rv-group>
             <Link href={pdp} className="lf-pcard">
-              <div className="lf-pcard__img lf-zoom"><Media slot="STUDIO-NAVY" sizes="(min-width: 1000px) 40vw, 90vw" /></div>
+              <div className={`lf-pcard__img${hoverOne ? " lf-swap" : " lf-zoom"}`}><Media slot="STUDIO-NAVY" sizes="(min-width: 1000px) 40vw, 90vw" />{hoverOne ? <Image src={hoverOne} alt="" aria-hidden="true" width={1100} height={1100} sizes="(min-width: 1000px) 40vw, 90vw" loading="lazy" className="lf-swap__b" /> : null}</div>
               <div className="lf-pcard__row"><h3 className="lf-pcard__t">Glea book light</h3><span className="lf-pcard__p">{price}</span></div>
               <p className="lf-pcard__d">Clip-on, bendable neck, 3 light colors, six colors to choose from.</p>
             </Link>
             <Link href={pdp} className="lf-pcard">
-              <div className="lf-pcard__img lf-zoom"><Media slot="LINEUP" sizes="(min-width: 1000px) 40vw, 90vw" /></div>
+              <div className={`lf-pcard__img${hoverTwo ? " lf-swap" : " lf-zoom"}`}><Media slot="LINEUP" sizes="(min-width: 1000px) 40vw, 90vw" />{hoverTwo ? <Image src={hoverTwo} alt="" aria-hidden="true" width={1100} height={1100} sizes="(min-width: 1000px) 40vw, 90vw" loading="lazy" className={`lf-swap__b${hoverTwo.includes("glea-cut-") ? " is-cut" : ""}`} /> : null}</div>
               <div className="lf-pcard__row"><h3 className="lf-pcard__t">Buy 2, save ${site.bundle.save}</h3><span className="lf-pcard__p">2 lights</span></div>
               <p className="lf-pcard__d">One for you, one for the reader next to you. $5 comes off at checkout.</p>
             </Link>

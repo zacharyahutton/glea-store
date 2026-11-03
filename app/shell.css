@@ -57,7 +57,17 @@ button.lnk { font-weight: 600; }
 /* Coming back up over the lower hero: a light cream veil, still cream text */
 .hdr--veil .hdr__bar { background: rgba(251, 247, 237, 0.3); color: var(--page); border-color: rgba(251, 247, 237, 0.3);
   -webkit-backdrop-filter: blur(12px) saturate(1.15); backdrop-filter: blur(12px) saturate(1.15); }
-:is(.hdr--over, .hdr--veil) .icon-btn:hover { background: rgba(251, 243, 228, 0.14); }
+:is(.hdr--over, .hdr--veil) .icon-btn:hover { background: none; }
+/* Hover or keyboard focus on the header while it is see-through: it goes solid, like Loftie (T-052, measured live at 1440:
+   wrapper to rgb(251,247,237), text to near black, border rgba(255,255,255,.6), blur 18px, deeper shadow; .32s ease;
+   back to glass on mouse leave). Same look as the solid-on-scroll state. */
+@media (hover: hover) { :is(.hdr--over, .hdr--veil):hover .hdr__bar { background: var(--page); color: var(--ink); border-color: rgba(255, 255, 255, 0.6);
+  -webkit-backdrop-filter: blur(18px) saturate(1.15); backdrop-filter: blur(18px) saturate(1.15);
+  box-shadow: 0 22px 52px rgba(12, 7, 5, 0.2), 0 3px 12px rgba(12, 7, 5, 0.08); }
+  :is(.hdr--over, .hdr--veil):hover .hdr__nav a.is-hi { color: var(--glow-ink); } }
+:is(.hdr--over, .hdr--veil):focus-within .hdr__bar { background: var(--page); color: var(--ink); border-color: rgba(255, 255, 255, 0.6);
+  box-shadow: 0 22px 52px rgba(12, 7, 5, 0.2), 0 3px 12px rgba(12, 7, 5, 0.08); }
+:is(.hdr--over, .hdr--veil):focus-within .hdr__nav a.is-hi { color: var(--glow-ink); }
 .hdr__left { display: flex; align-items: center; gap: 0; min-width: 0; }
 .hdr .logo { font-size: 1.625rem; transition: color .32s ease; }
 .hdr__nav { display: none; }
@@ -67,7 +77,10 @@ button.lnk { font-weight: 600; }
 .hdr__nav a.is-hi { color: var(--glow-ink); font-weight: 600; }
 :is(.hdr--over, .hdr--veil) .hdr__nav a.is-hi { color: var(--glow); }
 .hdr__icons { display: flex; align-items: center; gap: 0; }
-.hdr .icon-btn { width: 37px; height: 44px; border-radius: var(--r-btn); }
+.hdr .icon-btn { width: 40px; height: 44px; border-radius: var(--r-btn); background: none; transition: color .32s ease, opacity .2s ease; }
+.hdr .icon-btn svg { transition: transform .25s ease; }
+@media (hover: hover) { .hdr .icon-btn:hover { background: none; opacity: .72; } .hdr .icon-btn:hover svg { transform: translateY(-1px); } }
+.hdr .badge { top: 4px; right: 3px; min-width: 17px; height: 17px; font-size: 10.5px; line-height: 17px; padding: 0 4px; border-radius: 9px; background: var(--glow); color: var(--ink); font-weight: 700; }
 .hdr__search--d { display: none !important; }
 /* Mobile: menu and search on the left, logo centered, cart on the right */
 @media (max-width: 999px) {
@@ -93,8 +106,8 @@ button.lnk { font-weight: 600; }
 .lf-hero .btn { text-shadow: none; }
 .lf-hero__in { position: relative; z-index: 1; display: flex; flex-direction: column; align-items: center; text-align: center;
   padding: calc(var(--ab-h) + var(--hdr-h) + 118px) 20px 0; }
-.lf-hero__t { font-family: var(--f-head); font-weight: 400; font-size: 32px; line-height: .95; letter-spacing: -0.01em; max-width: 350px; margin: 0 0 20px; }
-.lf-hero__s { max-width: 340px; font-size: 16px; line-height: 1.1; margin: 0 0 14px; color: var(--page); }
+.lf-hero__t { font-family: var(--f-head); font-weight: 400; font-size: 46px; line-height: .98; letter-spacing: -0.015em; max-width: 360px; margin: 0 0 20px; }
+.lf-hero__s { max-width: 340px; font-size: 18px; line-height: 1.3; margin: 0 0 20px; color: var(--page); }
 /* Product standing at the bottom center, on a soft surface (T-051, Loftie clock placement) */
 .lf-hero__ground { position: absolute; left: 0; right: 0; bottom: 0; height: 14%; z-index: 0; pointer-events: none;
   background: linear-gradient(180deg, rgba(0, 0, 0, 0) 0, rgba(10, 6, 4, .45) 55%, rgba(10, 6, 4, .7) 100%); }
@@ -106,20 +119,18 @@ button.lnk { font-weight: 600; }
 @media (min-width: 1000px) {
   .lf-hero { height: 100vh; }
   .lf-hero__in { padding-top: calc(var(--ab-h) + var(--hdr-h) + 22px); }
-  .lf-hero__t { font-size: 65px; line-height: 1.05; max-width: 700px; margin-bottom: 24px; }
-  .lf-hero__s { max-width: 500px; font-size: 18px; line-height: 1.25; margin: 0 0 32px; }
+  .lf-hero__t { font-size: clamp(64px, 9.6vh, 88px); line-height: 1.02; max-width: 860px; margin-bottom: 22px; }
+  .lf-hero__s { max-width: 560px; font-size: 21px; line-height: 1.35; margin: 0 0 30px; }
   .lf-hero .btn { min-width: 266px; min-height: 57px; font-size: 16px; }
-  .lf-hero__prod { height: 38%; max-height: 360px; bottom: 3.5%; }
+  .lf-hero__prod { height: 34%; max-height: 340px; bottom: 3.5%; }
 }
-/* Background video: fades in over the poster once it plays (.3s), like Loftie. Never shown with reduced motion. */
+/* Short screens: keep the text block clear of the product (T-052) */
+@media (max-width: 999px) and (max-height: 720px) { .lf-hero__in { padding-top: calc(var(--ab-h) + var(--hdr-h) + 44px); } .lf-hero__t { font-size: 40px; } .lf-hero__prod { height: 24%; } }
+@media (min-width: 1000px) and (max-height: 760px) { .lf-hero__in { padding-top: calc(var(--ab-h) + var(--hdr-h) + 6px); } .lf-hero__s { margin-bottom: 22px; } .lf-hero__prod { height: 28%; } }
+/* Background video: fades in over the poster once it plays (.3s), like Loftie. No pause button (T-052, as on Loftie). Never shown with reduced motion. */
 .bgv { opacity: 0; transition: opacity .3s ease; }
 .bgv.is-ready { opacity: 1; }
-.bgv__toggle { position: absolute; left: 16px; bottom: 16px; z-index: 2; width: 40px; height: 40px; display: grid; place-items: center;
-  border-radius: var(--r-btn); background: rgba(20, 22, 31, 0.45); color: var(--page); border: 1px solid rgba(251, 247, 237, 0.35);
-  -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px); transition: background-color .32s ease; }
-.bgv__toggle:hover { background: rgba(20, 22, 31, 0.7); }
-@media (min-width: 1000px) { .bgv__toggle { left: 24px; bottom: 24px; } }
-@media (prefers-reduced-motion: reduce) { .bgv { display: none; } }
+@media (prefers-reduced-motion: reduce) { .bgv { display: none; } .lf-swap > *, .hdr__bar, .hdr .icon-btn svg { transition: none !important; } }
 
 /* Section primitives */
 .lf-sec { padding-block: var(--sec); }
@@ -152,6 +163,16 @@ button.lnk { font-weight: 600; }
 .lf-zoom img { transition: transform .65s var(--e-zoom); }
 @media (hover: hover) { a:hover .lf-zoom img, .lf-zoom:hover img { transform: scale(1.03); } }
 img.is-cut { object-fit: contain !important; padding: 6%; }
+/* Card hover image swap (T-052, measured on loftie.com): second image crossfades in over the first, opacity .4s ease-in-out,
+   no zoom. Fine pointers only (touch shows the first image). Missing second image = the card keeps its .lf-zoom. */
+.lf-swap { position: relative; }
+.lf-swap > :is(img, picture) { transition: opacity .4s ease-in-out, visibility .4s ease-in-out; }
+.lf-swap > img.lf-swap__b { position: absolute; inset: 0; display: none; opacity: 0; visibility: hidden; z-index: 1; }
+@media (pointer: fine) {
+  .lf-swap > img.lf-swap__b { display: block; }
+  a:is(:hover, :focus-visible) .lf-swap > img.lf-swap__b, .lf-swap:hover > img.lf-swap__b { opacity: 1; visibility: visible; }
+  a:is(:hover, :focus-visible) .lf-swap > :is(img, picture):not(.lf-swap__b), .lf-swap:hover > :is(img, picture):not(.lf-swap__b) { opacity: 0; }
+}
 .lf-stage, :has(> img.is-cut), :has(> picture > img.is-cut) { background: radial-gradient(70% 70% at 50% 55%, #f6e7c8 0, #efe1c6 60%, #e8d7b8 100%); }
 .lf-glow__light :has(> img.is-cut), .lf-glow__light:has(> img.is-cut), .lf-bundle__img:has(> img.is-cut), .lf-bundle__img :has(> img.is-cut) { background: none; }
 .lf-glow__light img.is-cut, .lf-bundle__img img.is-cut { padding: 0; }

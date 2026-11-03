@@ -1,6 +1,5 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
-import { Icon } from "./Icon";
 
 const MOBILE_MQ = "(max-width: 767px)";
 
@@ -9,15 +8,12 @@ const MOBILE_MQ = "(max-width: 767px)";
  * - No src until after window load + idle, so it never competes with the poster (the LCP image).
  * - Picks the mobile or desktop file once, by screen width.
  * - Skipped with prefers-reduced-motion or Save-Data: the poster stays.
- * - Pauses when off screen. A pause button meets WCAG 2.2.2.
+ * - Pauses when off screen. No on-screen pause button (T-052, owner request; Loftie has none). Reduced-motion users never get the video.
  * - If the file fails to load, it stays invisible and the poster shows.
  */
 export function BgVideo({ d, m }: { d: string; m: string }) {
   const ref = useRef<HTMLVideoElement>(null);
-  const [started, setStarted] = useState(false);
   const [ready, setReady] = useState(false);
-  const [paused, setPaused] = useState(false);
-  const pausedRef = useRef(false);
 
   useEffect(() => {
     const v = ref.current;
@@ -30,7 +26,6 @@ export function BgVideo({ d, m }: { d: string; m: string }) {
     const start = () => {
       if (gone || v.getAttribute("src")) return;
       v.src = matchMedia(MOBILE_MQ).matches ? m : d;
-      setStarted(true);
       v.play().catch(() => {});
     };
     const later = () => {
@@ -40,7 +35,7 @@ export function BgVideo({ d, m }: { d: string; m: string }) {
     if (document.readyState === "complete") later();
     else window.addEventListener("load", later, { once: true });
     const io = new IntersectionObserver(([e]) => {
-      if (!v.getAttribute("src") || pausedRef.current) return;
+      if (!v.getAttribute("src")) return;
       if (e.isIntersecting) v.play().catch(() => {});
       else v.pause();
     });
@@ -58,25 +53,8 @@ export function BgVideo({ d, m }: { d: string; m: string }) {
     };
   }, [d, m]);
 
-  const toggle = () => {
-    const v = ref.current;
-    if (!v) return;
-    const next = !pausedRef.current;
-    pausedRef.current = next;
-    setPaused(next);
-    if (next) v.pause();
-    else v.play().catch(() => {});
-  };
-
   return (
-    <>
-      <video ref={ref} className={`bgv${ready ? " is-ready" : ""}`} muted loop playsInline preload="none" aria-hidden="true" tabIndex={-1}
-        onPlaying={() => setReady(true)} onError={() => setReady(false)} />
-      {started && ready ? (
-        <button type="button" className="bgv__toggle" onClick={toggle} aria-label={paused ? "Play background video" : "Pause background video"}>
-          <Icon name={paused ? "play" : "pause"} size={16} />
-        </button>
-      ) : null}
-    </>
+    <video ref={ref} className={`bgv${ready ? " is-ready" : ""}`} muted loop playsInline preload="none" aria-hidden="true" tabIndex={-1}
+      onPlaying={() => setReady(true)} onError={() => setReady(false)} />
   );
 }

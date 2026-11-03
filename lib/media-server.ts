@@ -60,6 +60,16 @@ export function resolveCardImage(slug: string): string | undefined {
   return c ? `/media/${c}` : resolveColorImages(slug)[0];
 }
 
+/**
+ * Card hover image (T-052, Loftie card image swap): glea-hover-<color> (4:5, same scene closer, no person) when present,
+ * else the color's studio photo (glea-var-<color>-1100), else its lit cutout. Never the same file as the card image.
+ */
+export function resolveHoverImage(slug: string, primary?: string): string | undefined {
+  const h = findDrop(`glea-hover-${slug.replace(/-/g, "")}`);
+  const opts = [h ? `/media/${h}` : null, ...resolveColorImages(slug).filter((x) => !x.includes("-unlit"))];
+  return opts.find((x): x is string => !!x && x !== primary);
+}
+
 /** True when a slot's drop-in render (not the placeholder) is present. */
 export function hasDrop(name: SlotName): boolean {
   const s = slots[name] as { drop?: string };
