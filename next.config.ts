@@ -3,6 +3,7 @@ import type { NextConfig } from "next";
 const allowIndex = process.env.NEXT_PUBLIC_ALLOW_INDEX === "true";
 
 const nextConfig: NextConfig = {
+  env: { NEXT_PUBLIC_ON_VERCEL: process.env.VERCEL ? "1" : "" },
   poweredByHeader: false,
   images: {
     formats: ["image/avif", "image/webp"],

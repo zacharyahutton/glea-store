@@ -9,7 +9,7 @@ const META = process.env.NEXT_PUBLIC_META_PIXEL_ID;
 const TIKTOK = process.env.NEXT_PUBLIC_TIKTOK_PIXEL_ID;
 
 /**
- * Analytics + consent. Vercel Analytics is cookieless and always on.
+ * Analytics + consent. Vercel Analytics is cookieless and loads only when deployed on Vercel.
  * GA4 loads with Consent Mode v2 defaults set to denied, then updates on choice.
  * Meta Pixel and TikTok Pixel only load after the visitor allows marketing cookies.
  */
@@ -49,7 +49,7 @@ export function Analytics() {
 
   return (
     <>
-      <VercelAnalytics />
+      {process.env.NEXT_PUBLIC_ON_VERCEL ? <VercelAnalytics /> : null}
       {GA ? (
         <>
           <Script id="ga-consent" strategy="afterInteractive">{`window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}window.gtag=gtag;gtag('consent','default',{analytics_storage:'denied',ad_storage:'denied',ad_user_data:'denied',ad_personalization:'denied',wait_for_update:500});gtag('js',new Date());gtag('config','${GA}',{debug_mode:location.search.indexOf('debug_analytics')>-1});`}</Script>

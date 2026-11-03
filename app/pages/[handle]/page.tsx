@@ -125,7 +125,7 @@ export default async function Page({ params }: { params: Promise<{ handle: strin
           <section className="sec sec--white">
             <div className="container">
               <div className="grid grid-3">
-                {benefits.map((b) => <div className="card" key={b.title}><h3 className="h3" style={{ marginTop: 0 }}>{b.title}</h3><p className="muted">{b.text}</p></div>)}
+                {benefits.filter((b) => b.title !== "Your page, not the room").map((b) => <div className="card" key={b.title}><h3 className="h3" style={{ marginTop: 0 }}>{b.title}</h3><p className="muted">{b.text}</p></div>)}
               </div>
               <div style={{ marginTop: 32 }}><AiNote /></div>
             </div>
