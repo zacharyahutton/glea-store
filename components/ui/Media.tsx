@@ -1,6 +1,6 @@
 import Image, { getImageProps } from "next/image";
 import { preload } from "react-dom";
-import { resolveSlot } from "@/lib/media-server";
+import { resolveSlot, type ResolvedImage } from "@/lib/media-server";
 import { slots, type SlotName } from "@/lib/media";
 import { Placeholder } from "./Placeholder";
 
@@ -13,8 +13,8 @@ const DESKTOP_MQ = "(min-width: 768px)";
  * so each screen downloads one right-sized image. For the LCP image (priority) we add one
  * media-scoped preload per source, so a phone never preloads the desktop file. No lazy loading on it.
  */
-export function Media({ slot, sizes = "100vw", priority = false, alt, color }: { slot: SlotName; sizes?: string; priority?: boolean; alt?: string; color?: string }) {
-  const img = resolveSlot(slot);
+export function Media({ slot, sizes = "100vw", priority = false, alt, color, image }: { slot: SlotName; sizes?: string; priority?: boolean; alt?: string; color?: string; image?: ResolvedImage }) {
+  const img = image ?? resolveSlot(slot);
   const s = slots[slot] as { alt: string; label?: string };
   if (!img) return <Placeholder label={s.label ?? s.alt} color={color} />;
   const a = alt ?? img.alt;

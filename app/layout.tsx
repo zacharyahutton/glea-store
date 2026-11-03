@@ -12,8 +12,7 @@ import { CartDrawer } from "@/components/cart/CartDrawer";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { Analytics } from "@/components/layout/Analytics";
-import { Popup } from "@/components/layout/Popup";
-import { Chat } from "@/components/layout/Chat";
+import { DeferredExtras } from "@/components/layout/Deferred";
 import { JsonLd } from "@/components/ui/JsonLd";
 import { resolveSlot } from "@/lib/media-server";
 
@@ -54,8 +53,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
           <main id="main">{children}</main>
           <Footer shop={shopLinks} help={help?.items ?? []} policies={policies} />
           <CartDrawer />
-          <Popup image={popupImg ? { src: popupImg.src, alt: popupImg.alt, w: popupImg.w, h: popupImg.h } : null} />
-          <Chat />
+          <DeferredExtras popupImage={popupImg ? { src: popupImg.src, alt: popupImg.alt, w: popupImg.w, h: popupImg.h } : null} />
           <Analytics />
           <Reveal />
         </CartProvider>

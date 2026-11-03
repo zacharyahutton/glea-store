@@ -81,6 +81,19 @@ export function ProductView({ product, shared, colorMedia, initialColor, bundleI
     io.observe(el);
     return () => io.disconnect();
   }, []);
+  // T-051: on phones the chat button steps aside while the swatches or the add to cart row are on screen.
+  const swRef = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    const els = [swRef.current, buyRef.current].filter(Boolean) as Element[];
+    if (!els.length) return;
+    const seen = new Set<Element>();
+    const io = new IntersectionObserver((es) => {
+      es.forEach((e) => (e.isIntersecting ? seen.add(e.target) : seen.delete(e.target)));
+      document.body.classList.toggle("fab-off", seen.size > 0);
+    }, { rootMargin: "0px 0px 0px 0px", threshold: 0 });
+    els.forEach((el) => io.observe(el));
+    return () => { io.disconnect(); document.body.classList.remove("fab-off"); };
+  }, []);
   useEffect(() => {
     document.body.classList.toggle("has-sticky", sticky);
     return () => document.body.classList.remove("has-sticky");
@@ -145,7 +158,7 @@ export function ProductView({ product, shared, colorMedia, initialColor, bundleI
           {colorOpt ? (
             <>
               <p className="lf-buy__opt" id="color-label">{color}{soldOut ? <span className="lf-buy__warn"> Sold out</span> : null}</p>
-              <div className="lf-sws" role="radiogroup" aria-labelledby="color-label">{swatchButtons()}</div>
+              <div className="lf-sws" ref={swRef} role="radiogroup" aria-labelledby="color-label">{swatchButtons()}</div>
             </>
           ) : null}
 

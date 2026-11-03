@@ -16,15 +16,19 @@ export const navLinks = [
 ];
 
 /**
- * Sticky header under the announcement bar.
- * - Home, at the top: transparent over the hero with cream text.
- * - After scrolling (and on every other page): a floating cream capsule with blur and a soft shadow (.32s).
- * - Hides on scroll down, comes back on scroll up (transform .35s), like Loftie. Never hides while a menu or the cart is open.
+ * Sticky header under the announcement bar (T-051, measured on loftie.com at 1440 and 390).
+ * - Home, near the top: a see-through glass capsule over the hero (faint dark tint, 12px blur, thin cream border), cream text.
+ * - Home, between HIDE_AT and SOLID_AT on the way back up: a light cream veil. Past SOLID_AT (and on every other page):
+ *   the solid cream capsule with dark text. Color changes run .32s.
+ * - Hides on scroll down past HIDE_AT, comes back on scroll up (transform .35s). Never hides while a menu or the cart is open.
  */
+const HIDE_AT = 280;
+const SOLID_AT = 520;
 export function Header({ menu, help }: { menu: MenuItem[]; help: MenuItem[] }) {
   const { cart, setOpen, open: cartOpen } = useCart();
   const [navOpen, setNavOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [solid, setSolid] = useState(false);
   const [hidden, setHidden] = useState(false);
   const path = usePathname();
   const closeRef = useRef<HTMLButtonElement>(null);
@@ -37,9 +41,10 @@ export function Header({ menu, help }: { menu: MenuItem[]; help: MenuItem[] }) {
       cancelAnimationFrame(raf);
       raf = requestAnimationFrame(() => {
         const y = window.scrollY;
-        setScrolled(y > 10);
+        setScrolled(y > HIDE_AT);
+        setSolid(y > SOLID_AT);
         const inside = hdrRef.current?.contains(document.activeElement);
-        if (y < 200 || inside) setHidden(false);
+        if (y < HIDE_AT || inside) setHidden(false);
         else if (Math.abs(y - last) > 6) setHidden(y > last);
         last = y;
       });
@@ -64,17 +69,19 @@ export function Header({ menu, help }: { menu: MenuItem[]; help: MenuItem[] }) {
 
   const count = cart?.totalQuantity ?? 0;
   const isCurrent = (url: string) => (url.split("#")[0] === path && !url.includes("#") ? "page" : undefined);
-  const over = path === "/" && !scrolled;
+  const home = path === "/";
+  const tone = !home || solid ? "" : scrolled ? " hdr--veil" : " hdr--over";
   const extra = menu.filter((m) => !navLinks.some((n) => n.url === m.url) && !/how it works/i.test(m.title));
 
   return (
     <>
-      <header ref={hdrRef} className={`hdr${over ? " hdr--over" : ""}${scrolled ? " is-scrolled" : ""}${hidden && !navOpen && !cartOpen ? " is-hidden" : ""}`} onFocus={() => setHidden(false)}>
+      <header ref={hdrRef} className={`hdr${tone}${scrolled ? " is-scrolled" : ""}${hidden && !navOpen && !cartOpen ? " is-hidden" : ""}`} onFocus={() => setHidden(false)}>
         <div className="hdr__bar">
           <div className="hdr__left">
             <button className="icon-btn menu-btn" aria-label="Open menu" aria-expanded={navOpen} aria-controls="mobile-nav" onClick={() => setNav(true)}>
-              <Icon name="menu" />
+              <Icon name="menu" size={19} />
             </button>
+            <Link href="/search" className="icon-btn hdr__search hdr__search--m" aria-label="Search"><Icon name="search" size={19} /></Link>
             <Link href="/" className="logo" aria-label="Glea home">
               <span className="logo__dot" aria-hidden="true" />
               glea
@@ -86,9 +93,9 @@ export function Header({ menu, help }: { menu: MenuItem[]; help: MenuItem[] }) {
             </nav>
           </div>
           <div className="hdr__icons">
-            <Link href="/search" className="icon-btn" aria-label="Search"><Icon name="search" size={20} /></Link>
+            <Link href="/search" className="icon-btn hdr__search hdr__search--d" aria-label="Search"><Icon name="search" size={19} /></Link>
             <button className="icon-btn hdr__cart" aria-label={`Open cart, ${count} item${count === 1 ? "" : "s"}`} onClick={() => setOpen(true)}>
-              <Icon name="cart" size={20} />
+              <Icon name="cart" size={19} />
               {count > 0 ? <span className="badge" aria-hidden="true">{count}</span> : null}
             </button>
           </div>

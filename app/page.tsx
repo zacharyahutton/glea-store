@@ -1,9 +1,12 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import Image from "next/image";
+import { mediaExists } from "@/lib/media-server";
 import { shopify } from "@/lib/shopify";
 import { site, formatMoney } from "@/lib/site";
 import { AiNote } from "@/components/home/Sections";
 import { Media } from "@/components/ui/Media";
+import { VideoSlot } from "@/components/ui/VideoSlot";
 import { JsonLd } from "@/components/ui/JsonLd";
 import { SpecRings, GoodToKnow, ImgPanel } from "@/components/lf/Blocks";
 import { Tabs } from "@/components/lf/Tabs";
@@ -30,16 +33,24 @@ export default async function Home() {
     { id: "travel", label: "Travel", quote: "It weighs 63 g and charges by USB, so it packs right next to your book.", slot: "LIFE-ARMCHAIR" as SlotName, chip: "Up to", chipV: "80 h per charge" },
     { id: "gift", label: "Gifting", quote: "Six colors, so there is one for every reader on your list.", slot: "LIFE-UGC" as SlotName, chip: "Colors", chipV: "6" },
   ];
+  // Product standing at the bottom center of the hero, like the Loftie clock (T-051). Filename-driven: no file, no product.
+  const heroProduct = mediaExists("glea-hero-product.webp") ? "/media/glea-hero-product.webp" : null;
   return (
     <>
       <section className="lf-hero" aria-labelledby="hero-title">
-        <div className="lf-hero__media"><Media slot="HERO-01" priority sizes="100vw" /></div>
+        <div className="lf-hero__media"><VideoSlot base="glea-hero" still="HERO-01" priority sizes="100vw" /></div>
         <div className="lf-hero__shade" aria-hidden="true" />
         <div className="lf-hero__in">
-          <h1 id="hero-title" className="lf-hero__t">Soft light, after dark.</h1>
+          <h1 id="hero-title" className="lf-hero__t">Soft light,<br /> after dark.</h1>
           <p className="lf-hero__s">A clip-on book light with a warm glow that stays on your page, so the room stays dark. Six colors. Rechargeable.</p>
           <Link className="btn btn--cream" href={pdp}>Shop the light</Link>
         </div>
+        {heroProduct ? (
+          <div className="lf-hero__prod">
+            <Image src={heroProduct} alt="Glea clip-on book light in White, switched on" width={254} height={700} sizes="(min-width: 1000px) 130px, 100px" loading="eager" fetchPriority="low" />
+          </div>
+        ) : null}
+        <div className="lf-hero__ground" aria-hidden="true" />
       </section>
 
       <SpecRings />

@@ -87,3 +87,25 @@ Slots with no matching shotlist image (please add):
 3. **OG** 1200x630: `glea-og-life` (no text in the image; we add nothing on top). Can be a crop of L-01.
 
 Shotlist images no slot uses: none. Every P-01..P-31 and L-01..L-10 has a slot above. P-17..P-22 (unlit) appear only as PDP gallery image 2. glea-swatch-[color] files (code-made) are not needed.
+
+## Video slots (T-051)
+Filename-driven, like the image slots. Files live in `public/media/video/`:
+
+| File | Use | Size today |
+|---|---|---|
+| `<base>-d.mp4` | Desktop loop, 16:9 (1920x1080) | glea-hero-d.mp4, 1.1 MB |
+| `<base>-m.mp4` | Mobile loop, 9:16 (720x1280). Optional: the desktop file is used if missing | glea-hero-m.mp4, 0.4 MB |
+| `<base>-d.webp` / `<base>-m.webp` | Posters (first frame). This is the LCP image and is preloaded | 45 KB / 13 KB |
+| `videos.json` | Poster sizes and alt text, written by the script | |
+
+- The home hero uses base `glea-hero` with still slot `HERO-01`: `<VideoSlot base="glea-hero" still="HERO-01" priority />`.
+- Video rules: muted, loop, playsInline, preload none, no audio track, aria-hidden. The file is attached only after page load + browser idle, picked once by screen width (767px and below = mobile file). It fades in over .3s when it starts playing, pauses when off screen, and has a pause / play button (bottom left).
+- prefers-reduced-motion or Save-Data: no video is loaded; the poster stays.
+- Missing mp4: the slot shows the still image slot (HERO-01) instead, and no video tag is rendered. A load error at runtime leaves the poster showing.
+- Adding or replacing a clip: encode, drop it in, run the script, commit (only committed files deploy):
+  `ffmpeg -i in.mp4 -an -c:v libx264 -crf 28 -pix_fmt yuv420p -vf scale=1920:1080 -movflags +faststart public/media/video/glea-hero-d.mp4`
+  then `node scripts/import-videos.mjs` (makes missing posters and updates videos.json). Delete the old posters first if the clip changed.
+- Sources today (see workflow/outputs/store-lead/T-050-video-picks.md): desktop = slot-5 warm lamp glow (Pexels, Tima Miroshnichenko), mobile = slot-6 woman reading by lamp light (Pexels, cottonbro studio). Mood placeholders, re-encoded smaller (crf 28, no audio). Never caption people in clips as endorsing the product.
+
+## Hero product (T-051)
+`public/media/glea-hero-product.webp`: transparent cutout of the White light (from glea-cut-hero-white-lit), standing at the bottom center of the home hero. Rebuild with `python3 scripts/hero-product-cutout.py glea-cut-hero-white-lit 10 public/media/glea-hero-product.webp`. If the file is missing, the hero shows no product.

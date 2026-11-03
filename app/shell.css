@@ -4,13 +4,13 @@
 :root {
   --r-btn: 10px; --r-blk: 16px; --r-sm: 8px;
   --navy: #1e2433; --line: #e2d8c4; --glass: rgba(251, 247, 237, 0.92);
-  --ab-h: 40px; --hdr-h: 72px; --header-h: 72px; --ann-h: 40px;
+  --ab-h: 50px; --hdr-h: 74px; --header-h: 74px; --ann-h: 50px;
   --sec: 56px; --gutter: 16px; --wrap: 1360px;
   --e-out: cubic-bezier(0.25, 0.46, 0.45, 0.94);
   --e-zoom: cubic-bezier(0.22, 0.61, 0.36, 1);
 }
 @media (min-width: 740px) { :root { --gutter: 24px; } }
-@media (min-width: 1000px) { :root { --ab-h: 44px; --ann-h: 44px; --hdr-h: 100px; --header-h: 100px; --sec: 88px; --gutter: 40px; } }
+@media (min-width: 1000px) { :root { --ab-h: 46px; --ann-h: 46px; --hdr-h: 100px; --header-h: 100px; --sec: 88px; --gutter: 40px; } }
 html { scroll-padding-top: calc(var(--ab-h) + var(--hdr-h) + 12px); }
 body { font-size: 16px; line-height: 1.65; }
 @media (min-width: 1000px) { body { font-size: 17px; } }
@@ -34,51 +34,92 @@ em { font-style: italic; }
 .lnk:hover, .lnk:focus-visible { background-size: 100% 1px; }
 button.lnk { font-weight: 600; }
 
-/* Announcement bar: static, pinned */
+/* Announcement bar: static line, pinned at the top (Loftie: 46px desktop, 50px mobile, stays on scroll) */
 .abar { position: sticky; top: 0; z-index: 61; height: var(--ab-h); display: grid; place-items: center; padding-inline: 12px;
-  background: var(--navy); color: var(--page); font-size: 13px; text-align: center; line-height: 1.2; }
+  background: var(--navy); color: var(--page); font-size: 14px; text-align: center; line-height: 1.2; }
 .abar em { color: var(--glow); font-style: italic; }
-@media (min-width: 1000px) { .abar { font-size: 15px; } }
+@media (min-width: 1000px) { .abar { font-size: 16px; } }
 
-/* Header capsule */
-.hdr { position: sticky; top: var(--ab-h); z-index: 60; padding: 8px 12px; transition: transform .35s ease; }
+/* Header capsule (T-051, measured on loftie.com). Mobile: 12px side inset, 54px tall, 16px radius.
+   Desktop: 24px inset, 72px tall, full round ends. Sits over the hero through a negative margin on the hero. */
+.hdr { position: sticky; top: var(--ab-h); z-index: 60; padding: 10px 12px; transition: transform .35s ease; }
 @media (min-width: 1000px) { .hdr { padding: 14px 24px; } }
-.hdr.is-hidden { transform: translateY(-190px); }
-.hdr__bar { height: 56px; display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 0 10px 0 6px;
-  border-radius: 999px; background: var(--glass); color: var(--ink); border: 1px solid rgba(255, 255, 255, 0.5);
+.hdr.is-hidden { transform: translateY(calc(-1 * (var(--hdr-h) + 90px))); }
+.hdr__bar { position: relative; height: 54px; display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 0 16px;
+  border-radius: 16px; background: var(--glass); color: var(--ink); border: 1px solid rgba(255, 255, 255, 0.5);
   -webkit-backdrop-filter: blur(16px) saturate(1.2); backdrop-filter: blur(16px) saturate(1.2);
-  box-shadow: 0 18px 44px rgba(20, 22, 31, 0.1), 0 2px 10px rgba(20, 22, 31, 0.05);
+  box-shadow: 0 18px 44px rgba(12, 7, 5, 0.1), 0 2px 10px rgba(12, 7, 5, 0.05);
   transition: background-color .32s ease, color .32s ease, border-color .32s ease, box-shadow .32s ease; }
-@media (min-width: 1000px) { .hdr__bar { height: 72px; padding: 0 22px 0 30px; } }
-.hdr--over .hdr__bar { background: transparent; color: var(--page); border-color: transparent; box-shadow: none;
-  -webkit-backdrop-filter: none; backdrop-filter: none; transition-duration: .25s; transition-timing-function: ease-in-out; }
-.hdr--over:hover .hdr__bar, .hdr--over:focus-within .hdr__bar { background: var(--glass); color: var(--ink); border-color: rgba(255, 255, 255, 0.5); }
-.hdr--over .icon-btn:hover { background: rgba(251, 243, 228, 0.14); }
-.hdr--over:hover .icon-btn:hover, .hdr--over:focus-within .icon-btn:hover { background: rgba(20, 22, 31, 0.06); }
-.hdr__left { display: flex; align-items: center; gap: 6px; min-width: 0; }
-@media (min-width: 1000px) { .hdr__left { gap: 40px; } }
-.hdr .logo { font-size: 1.625rem; }
+@media (min-width: 1000px) { .hdr__bar { height: 72px; padding: 0 30px; border-radius: 999px; } }
+/* Over the hero: see-through glass, cream text and icons */
+.hdr--over .hdr__bar { background: rgba(20, 22, 31, 0.06); color: var(--page); border-color: rgba(251, 247, 237, 0.22);
+  -webkit-backdrop-filter: blur(12px) saturate(1.15); backdrop-filter: blur(12px) saturate(1.15); }
+/* Coming back up over the lower hero: a light cream veil, still cream text */
+.hdr--veil .hdr__bar { background: rgba(251, 247, 237, 0.3); color: var(--page); border-color: rgba(251, 247, 237, 0.3);
+  -webkit-backdrop-filter: blur(12px) saturate(1.15); backdrop-filter: blur(12px) saturate(1.15); }
+:is(.hdr--over, .hdr--veil) .icon-btn:hover { background: rgba(251, 243, 228, 0.14); }
+.hdr__left { display: flex; align-items: center; gap: 0; min-width: 0; }
+.hdr .logo { font-size: 1.625rem; transition: color .32s ease; }
 .hdr__nav { display: none; }
-.hdr__nav ul { display: flex; gap: 30px; }
-.hdr__nav a { font-size: 16.5px; text-decoration: none; transition: color .32s ease; }
-.hdr__nav a:hover { color: var(--glow-ink); }
-.hdr--over:not(:hover):not(:focus-within) .hdr__nav a:hover { color: var(--glow); }
+.hdr__nav a { font-size: 16.5px; letter-spacing: .01em; text-decoration: none; transition: color .32s ease;
+  background: linear-gradient(currentColor, currentColor) 0 100% / 0 1px no-repeat; padding-bottom: 2px; transition: color .32s ease, background-size .3s ease; }
+.hdr__nav a:hover, .hdr__nav a:focus-visible { background-size: 100% 1px; }
 .hdr__nav a.is-hi { color: var(--glow-ink); font-weight: 600; }
-.hdr--over:not(:hover):not(:focus-within) .hdr__nav a.is-hi { color: var(--glow); }
-.hdr__icons { display: flex; align-items: center; gap: 2px; }
-.icon-btn { border-radius: 999px; }
-@media (min-width: 1000px) { .hdr__nav { display: flex; gap: 30px; } .menu-btn { display: none !important; } }
+:is(.hdr--over, .hdr--veil) .hdr__nav a.is-hi { color: var(--glow); }
+.hdr__icons { display: flex; align-items: center; gap: 0; }
+.hdr .icon-btn { width: 37px; height: 44px; border-radius: var(--r-btn); }
+.hdr__search--d { display: none !important; }
+/* Mobile: menu and search on the left, logo centered, cart on the right */
+@media (max-width: 999px) {
+  .hdr .menu-btn { margin-left: -9px; }
+  .hdr .logo { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); }
+  .hdr__icons { margin-right: -9px; }
+}
+@media (min-width: 1000px) {
+  .hdr .logo { font-size: 2rem; margin-right: 38px; }
+  .hdr__nav { display: flex; gap: 30px; }
+  .menu-btn, .hdr__search--m { display: none !important; }
+  .hdr__search--d { display: inline-grid !important; }
+}
 .hdr :focus-visible { outline-color: currentColor; }
 
-/* Home hero runs under the transparent header */
-.lf-hero { position: relative; margin-top: calc(-1 * var(--hdr-h)); min-height: clamp(560px, 92svh, 860px); display: flex; align-items: flex-end; color: var(--page); overflow: hidden; background: var(--navy); }
+/* Home hero (T-051, Loftie layout): full screen from the very top, running under the bar and the header.
+   Background: optional muted loop video over a still poster (see docs/IMAGE-SLOTS.md, video slots). Text block top-centered. */
+.lf-hero { position: relative; margin-top: calc(-1 * (var(--ab-h) + var(--hdr-h))); height: 100vh; height: 100svh; min-height: 560px; color: var(--page); overflow: hidden; background: #000; }
 .lf-hero__media, .lf-hero__shade { position: absolute; inset: 0; }
-.lf-hero__media img, .lf-hero__media picture { width: 100%; height: 100%; object-fit: cover; }
-.lf-hero__shade { background: linear-gradient(180deg, rgba(20, 22, 31, 0.55) 0, rgba(20, 22, 31, 0) 28%, rgba(20, 22, 31, 0) 45%, rgba(20, 22, 31, 0.7) 100%); }
-.lf-hero__in { position: relative; width: 100%; max-width: calc(var(--wrap) + 2 * var(--gutter)); margin-inline: auto; padding: 0 var(--gutter) clamp(40px, 7vw, 88px); display: grid; gap: 16px; justify-items: start; }
-.lf-hero__t { font-family: var(--f-head); font-weight: 400; font-size: clamp(2.4rem, 5vw, 4rem); line-height: 1.04; letter-spacing: -0.02em; max-width: 14ch; }
-.lf-hero__s { max-width: 34rem; font-size: 1.0625rem; color: #f3ead9; }
-.lf-hero .btn { margin-top: 8px; }
+.lf-hero__media :is(img, picture, video) { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.lf-hero__shade { background: radial-gradient(ellipse 46% 30% at 50% 30%, rgba(8, 5, 3, 0.62), rgba(8, 5, 3, 0.38) 60%, rgba(8, 5, 3, 0) 100%), linear-gradient(180deg, rgba(0, 0, 0, 0.32) 0, rgba(0, 0, 0, 0.12) 45%, rgba(0, 0, 0, 0) 70%); pointer-events: none; }
+.lf-hero__in { text-shadow: 0 1px 12px rgba(0, 0, 0, 0.35); }
+.lf-hero .btn { text-shadow: none; }
+.lf-hero__in { position: relative; z-index: 1; display: flex; flex-direction: column; align-items: center; text-align: center;
+  padding: calc(var(--ab-h) + var(--hdr-h) + 118px) 20px 0; }
+.lf-hero__t { font-family: var(--f-head); font-weight: 400; font-size: 32px; line-height: .95; letter-spacing: -0.01em; max-width: 350px; margin: 0 0 20px; }
+.lf-hero__s { max-width: 340px; font-size: 16px; line-height: 1.1; margin: 0 0 14px; color: var(--page); }
+/* Product standing at the bottom center, on a soft surface (T-051, Loftie clock placement) */
+.lf-hero__ground { position: absolute; left: 0; right: 0; bottom: 0; height: 14%; z-index: 0; pointer-events: none;
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0) 0, rgba(10, 6, 4, .45) 55%, rgba(10, 6, 4, .7) 100%); }
+.lf-hero__prod { position: absolute; left: 50%; bottom: 4.5%; z-index: 1; height: 30%; max-height: 300px; transform: translateX(-50%); pointer-events: none; }
+.lf-hero__prod img { position: static; display: block; height: 100%; width: auto; filter: drop-shadow(0 18px 22px rgba(0, 0, 0, .55)); }
+.lf-hero__prod::after { content: ""; position: absolute; left: 50%; bottom: -10px; width: 170%; height: 22px; transform: translateX(-50%); z-index: -1;
+  background: radial-gradient(closest-side, rgba(0, 0, 0, .6), rgba(0, 0, 0, 0)); }
+.lf-hero .btn { min-width: 232px; min-height: 43px; padding: 0 24px; font-size: 14px; font-weight: 700; }
+@media (min-width: 1000px) {
+  .lf-hero { height: 100vh; }
+  .lf-hero__in { padding-top: calc(var(--ab-h) + var(--hdr-h) + 22px); }
+  .lf-hero__t { font-size: 65px; line-height: 1.05; max-width: 700px; margin-bottom: 24px; }
+  .lf-hero__s { max-width: 500px; font-size: 18px; line-height: 1.25; margin: 0 0 32px; }
+  .lf-hero .btn { min-width: 266px; min-height: 57px; font-size: 16px; }
+  .lf-hero__prod { height: 38%; max-height: 360px; bottom: 3.5%; }
+}
+/* Background video: fades in over the poster once it plays (.3s), like Loftie. Never shown with reduced motion. */
+.bgv { opacity: 0; transition: opacity .3s ease; }
+.bgv.is-ready { opacity: 1; }
+.bgv__toggle { position: absolute; left: 16px; bottom: 16px; z-index: 2; width: 40px; height: 40px; display: grid; place-items: center;
+  border-radius: var(--r-btn); background: rgba(20, 22, 31, 0.45); color: var(--page); border: 1px solid rgba(251, 247, 237, 0.35);
+  -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px); transition: background-color .32s ease; }
+.bgv__toggle:hover { background: rgba(20, 22, 31, 0.7); }
+@media (min-width: 1000px) { .bgv__toggle { left: 24px; bottom: 24px; } }
+@media (prefers-reduced-motion: reduce) { .bgv { display: none; } }
 
 /* Section primitives */
 .lf-sec { padding-block: var(--sec); }
@@ -390,7 +431,12 @@ img.is-cut { object-fit: contain !important; padding: 6%; }
   .lf-sticky__sws { display: flex; }
   .lf-sticky .btn { min-height: 54px; min-width: 240px; }
 }
-@media (max-width: 999px) { body.has-sticky .chat-fab { bottom: 84px; } }
+@media (max-width: 999px) {
+  body.has-sticky .chat-fab { bottom: 84px; }
+  /* T-051: on the product page the help button steps aside while the color swatches or the add to cart row are on screen */
+  .chat-fab { transition: opacity .25s ease, visibility .25s, bottom .3s var(--ease); }
+  body.fab-off .chat-fab { opacity: 0; visibility: hidden; pointer-events: none; }
+}
 
 /* Drawers */
 .drawer--left { width: min(320px, 88vw); transition: transform .6s cubic-bezier(0.75, 0, 0.175, 1), visibility .6s cubic-bezier(0.75, 0, 0.175, 1); }
