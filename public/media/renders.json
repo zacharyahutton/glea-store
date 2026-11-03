@@ -1,1 +1,190 @@
-{}
+{
+ "glea-cut-hero-black-lit.webp": {
+  "w": 1400,
+  "h": 1400
+ },
+ "glea-cut-hero-black-unlit.webp": {
+  "w": 1400,
+  "h": 1400
+ },
+ "glea-cut-hero-amber-lit.webp": {
+  "w": 1400,
+  "h": 1400
+ },
+ "glea-cut-hero-amber-unlit.webp": {
+  "w": 1400,
+  "h": 1400
+ },
+ "glea-cut-hero-pink-lit.webp": {
+  "w": 1400,
+  "h": 1400
+ },
+ "glea-cut-hero-pink-unlit.webp": {
+  "w": 1400,
+  "h": 1400
+ },
+ "glea-cut-hero-purple-lit.webp": {
+  "w": 1400,
+  "h": 1400
+ },
+ "glea-cut-hero-purple-unlit.webp": {
+  "w": 1400,
+  "h": 1400
+ },
+ "glea-cut-hero-lakeblue-lit.webp": {
+  "w": 1400,
+  "h": 1400
+ },
+ "glea-cut-hero-lakeblue-unlit.webp": {
+  "w": 1400,
+  "h": 1400
+ },
+ "glea-cut-hero-white-lit.webp": {
+  "w": 1400,
+  "h": 1400
+ },
+ "glea-cut-hero-white-unlit.webp": {
+  "w": 1400,
+  "h": 1400
+ },
+ "glea-cut-onbook-black-lit.webp": {
+  "w": 1593,
+  "h": 1593
+ },
+ "glea-cut-side-black.webp": {
+  "w": 1385,
+  "h": 1385
+ },
+ "glea-cut-back-clip-black.webp": {
+  "w": 1396,
+  "h": 1396
+ },
+ "glea-cut-folded-black.webp": {
+  "w": 1024,
+  "h": 1024
+ },
+ "glea-macro-clip-black.webp": {
+  "w": 1024,
+  "h": 1024
+ },
+ "glea-macro-head-black-lit.webp": {
+  "w": 1024,
+  "h": 1024
+ },
+ "glea-macro-charge-black.webp": {
+  "w": 1024,
+  "h": 1024
+ },
+ "glea-cut-lineup-6.webp": {
+  "w": 2400,
+  "h": 1600
+ },
+ "glea-studio-navy-black-lit.webp": {
+  "w": 1024,
+  "h": 1024
+ },
+ "glea-studio-cream-white-lit.webp": {
+  "w": 1024,
+  "h": 1024
+ },
+ "glea-cut-top-black-lit.webp": {
+  "w": 1381,
+  "h": 1381
+ },
+ "glea-cut-bent-black-lit.webp": {
+  "w": 1496,
+  "h": 1496
+ },
+ "glea-macro-button-black.webp": {
+  "w": 1024,
+  "h": 1024
+ },
+ "glea-cut-light-4500k-black.webp": {
+  "w": 1400,
+  "h": 1400
+ },
+ "glea-cut-light-6000k-black.webp": {
+  "w": 1400,
+  "h": 1400
+ },
+ "glea-flatlay-inbox-black.webp": {
+  "w": 1024,
+  "h": 1024
+ },
+ "glea-cut-hand-black.webp": {
+  "w": 1024,
+  "h": 1024
+ },
+ "glea-studio-amber-amber-lit.webp": {
+  "w": 1800,
+  "h": 1200
+ },
+ "glea-cut-pair-black-white.webp": {
+  "w": 2400,
+  "h": 1600
+ },
+ "glea-life-hero-window.webp": {
+  "w": 1280,
+  "h": 720
+ },
+ "glea-life-plinth-stone.webp": {
+  "w": 864,
+  "h": 1080
+ },
+ "glea-life-nightstand.webp": {
+  "w": 1152,
+  "h": 768
+ },
+ "glea-life-hands-reading.webp": {
+  "w": 1024,
+  "h": 1024
+ },
+ "glea-life-partner-bed.webp": {
+  "w": 1152,
+  "h": 768
+ },
+ "glea-life-armchair.webp": {
+  "w": 1080,
+  "h": 720
+ },
+ "glea-life-travel-hotel.webp": {
+  "w": 864,
+  "h": 1080
+ },
+ "glea-life-sofa-blanket.webp": {
+  "w": 1024,
+  "h": 1024
+ },
+ "glea-life-gift-unwrap.webp": {
+  "w": 1024,
+  "h": 1024
+ },
+ "glea-life-ugc-stack.webp": {
+  "w": 864,
+  "h": 1080
+ },
+ "glea-card-black.webp": {
+  "w": 1200,
+  "h": 1200
+ },
+ "glea-card-amber.webp": {
+  "w": 1200,
+  "h": 1200
+ },
+ "glea-card-pink.webp": {
+  "w": 1200,
+  "h": 1200
+ },
+ "glea-card-purple.webp": {
+  "w": 1200,
+  "h": 1200
+ },
+ "glea-card-lakeblue.webp": {
+  "w": 1200,
+  "h": 1200
+ },
+ "glea-card-white.webp": {
+  "w": 1200,
+  "h": 1200
+ }
+}
