@@ -62,7 +62,7 @@ export function resolveCardImage(slug: string): string | undefined {
 
 /**
  * Card hover image (T-052, Loftie card image swap): glea-hover-<color> (4:5, same scene closer, no person) when present,
- * else the color's studio photo (glea-var-<color>-1100), else its lit cutout. Never the same file as the card image.
+ * else the color's lit cutout (glea-cut-hero-<color>-lit), else its studio photo (glea-var-<color>-1100). Never the same file as the card image.
  */
 export function resolveHoverImage(slug: string, primary?: string): string | undefined {
   const h = findDrop(`glea-hover-${slug.replace(/-/g, "")}`);

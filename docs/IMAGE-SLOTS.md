@@ -115,7 +115,7 @@ Filename-driven; drop the file in `/workspace/eco/glea-renders/`, run `node scri
 
 | Slot file | Where | Size / ratio | Notes | Fallback when missing |
 |---|---|---|---|---|
-| `glea-hover-black` (first), `glea-hover-amber`, `glea-hover-pink`, `glea-hover-purple`, `glea-hover-lakeblue`, `glea-hover-white` | Hover image on each color card (collection, search, PDP "more colors") and `glea-hover-black` on the home "Glea book light" card | 4:5 (e.g. 1600x2000), transparent not required | No person. Same scene as the card image, closer | Card: the color studio photo `glea-var-<color>-1100`, else the lit cutout. Home card: `glea-life-nightstand` |
+| `glea-hover-black` (first), `glea-hover-amber`, `glea-hover-pink`, `glea-hover-purple`, `glea-hover-lakeblue`, `glea-hover-white` | Hover image on each color card (collection, search, PDP "more colors") and `glea-hover-black` on the home "Glea book light" card | 4:5 (e.g. 1600x2000), transparent not required | No person. Same scene as the card image, closer | Card: the color's lit cutout `glea-cut-hero-<color>-lit` (on cream), else the studio photo `glea-var-<color>-1100`. Home card: `glea-life-nightstand` |
 | `glea-hover-pair` | Hover image on the home "Buy 2" card | 4:5 | Two lights, closer | `glea-cut-pair-black-white` |
 | `hero-frame-01-16x9` | Approved first hero frame: hero video poster (desktop) and the still fallback (also for a 2.5D parallax still) | 1920x1080 | Preloaded LCP image | Video first-frame poster `video/glea-hero-d.webp`, else HERO-01 still |
 | `hero-frame-01-9x16` | Same, mobile | 1080x1920 | | Desktop frame, else `video/glea-hero-m.webp`, else HERO-01 |
