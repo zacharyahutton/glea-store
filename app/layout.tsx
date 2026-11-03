@@ -1,9 +1,10 @@
 import type { Metadata, Viewport } from "next";
-import { DM_Sans, Fraunces } from "next/font/google";
-import { Marquee } from "@/components/home/Showcase";
+import { DM_Sans, Newsreader } from "next/font/google";
+import { AnnBar } from "@/components/layout/AnnBar";
 import { Reveal } from "@/components/motion/Reveal";
 import Link from "next/link";
 import "./globals.css";
+import "./shell.css";
 import { shopify } from "@/lib/shopify";
 import { site } from "@/lib/site";
 import { CartProvider } from "@/components/cart/CartProvider";
@@ -17,8 +18,9 @@ import { JsonLd } from "@/components/ui/JsonLd";
 import { resolveSlot } from "@/lib/media-server";
 
 const dmSans = DM_Sans({ subsets: ["latin"], variable: "--font-dm-sans", display: "swap" });
-// Two static weights only (300 display, 500 headings); no extra axes, to keep the above-the-fold font small.
-const fraunces = Fraunces({ subsets: ["latin"], variable: "--font-fraunces", display: "swap", weight: ["300", "500"], style: ["normal"] });
+// Headings: Newsreader 400 (+ italic 400 for second lines), the closest free match to Loftie's licensed
+// Austin News Deck. Phase 2 headings that asked for 500 now render at 400 (Loftie uses 400 everywhere). Body stays DM Sans (free stand-in for Messina Sans).
+const newsreader = Newsreader({ subsets: ["latin"], variable: "--font-fraunces", display: "swap", weight: ["400"], style: ["normal", "italic"] });
 
 export const metadata: Metadata = {
   metadataBase: new URL(site.url),
@@ -43,11 +45,11 @@ export default async function RootLayout({ children }: { children: React.ReactNo
     { title: "Search", url: "/search" },
   ];
   return (
-    <html lang="en" className={`${dmSans.variable} ${fraunces.variable}`}>
+    <html lang="en" className={`${dmSans.variable} ${newsreader.variable}`}>
       <body>
         <a href="#main" className="skip">Skip to content</a>
         <CartProvider>
-          <Marquee />
+          <AnnBar />
           <Header menu={main?.items ?? []} help={help?.items ?? []} />
           <main id="main">{children}</main>
           <Footer shop={shopLinks} help={help?.items ?? []} policies={policies} />

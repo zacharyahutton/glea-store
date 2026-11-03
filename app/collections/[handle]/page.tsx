@@ -8,6 +8,8 @@ import { ColorFilter } from "@/components/product/ColorFilter";
 import { Media } from "@/components/ui/Media";
 import { JsonLd } from "@/components/ui/JsonLd";
 import { AiNote } from "@/components/home/Sections";
+import { FaqList } from "@/components/ui/Faq";
+import { GoodToKnow } from "@/components/lf/Blocks";
 
 export const revalidate = 300;
 
@@ -34,28 +36,35 @@ export default async function CollectionPage({ params }: { params: Promise<{ han
   const colors = [...new Set(cards.map((x) => x.color))];
   const swatches = Object.fromEntries(cards.map((x) => [x.color, swatchFor(x.p, x.color)]));
   const url = `${site.url}/collections/${handle}`;
+  const help = [
+    { q: "Shipping", a: `US orders of $${site.freeShippingThreshold} or more ship free. Orders under $${site.freeShippingThreshold} ship for a flat $${site.flatShipping}.` },
+    { q: "Returns", a: `We accept returns within ${site.returnDays} days. Email hello@getglea.com with your order number to start one.` },
+    { q: "Charging", a: "Plug it in with the USB charging cable in the box. Up to 80 hours per charge from a 1000mAh battery, by the maker's figures. Run time varies with brightness and light color." },
+    { q: "In the box", a: "A reading light in your color, a charging cable and a silicone page-follower bookmark." },
+  ];
   return (
     <>
-      <section className="hero" style={{ minHeight: 0 }} aria-labelledby="coll-title">
-        <div className="hero__track">
-          <div className="hero__slide is-active" style={{ minHeight: "clamp(280px, 40vw, 440px)" }}>
-            <div className="hero__media"><Media slot="COLL" priority /></div>
-            <div className="hero__shade" />
-            <div className="container hero__content" style={{ width: "100%", paddingBlock: "40px" }}>
-              <span className="kicker" style={{ color: "var(--glow)" }}>Shop</span>
-              <h1 id="coll-title" className="h1">{title}</h1>
-              <p className="lead">{c.description || "One light, six colors. Pick the glow that fits your nightstand."}</p>
+      <section className="lf-sec lf-sec--page" aria-labelledby="coll-title">
+        <div className="lf-wrap">
+          <nav className="crumbs sr-only" aria-label="Breadcrumb">
+            <Link href="/">Home</Link><span aria-hidden="true">/</span><span aria-current="page">{title}</span>
+          </nav>
+          <ColorFilter title={handle === "all" || handle === "frontpage" ? "Shop all" : title} colors={colors} swatches={swatches} cards={cards.map((x) => ({ color: x.color, available: x.v.availableForSale, node: <ColorCard product={x.p} variant={x.v} sizes="(min-width: 1000px) 25vw, 50vw" /> }))} />
+        </div>
+      </section>
+      <section className="lf-sec lf-sec--top0" aria-labelledby="coll-help">
+        <div className="lf-wrap lf-text">
+          <div className="lf-accsplit" data-rv>
+            <div>
+              <h2 id="coll-help" className="sr-only">Before you pick</h2>
+              <FaqList items={help} />
             </div>
+            <div className="lf-accsplit__img"><Media slot="STUDIO-CREAM" sizes="(min-width: 1000px) 45vw, 100vw" /></div>
           </div>
         </div>
       </section>
-      <div className="container sec sec--tight">
-        <nav className="crumbs" aria-label="Breadcrumb" style={{ paddingTop: 0, marginBottom: 20 }}>
-          <Link href="/">Home</Link><span aria-hidden="true">/</span><span aria-current="page">{title}</span>
-        </nav>
-        <ColorFilter colors={colors} swatches={swatches} cards={cards.map((x) => ({ color: x.color, available: x.v.availableForSale, node: <ColorCard product={x.p} variant={x.v} /> }))} />
-        <div style={{ marginTop: 40 }}><AiNote /></div>
-      </div>
+      <GoodToKnow />
+      <div className="lf-wrap"><AiNote /></div>
       <JsonLd
         data={[
           { "@context": "https://schema.org", "@type": "BreadcrumbList", itemListElement: [{ "@type": "ListItem", position: 1, name: "Home", item: site.url }, { "@type": "ListItem", position: 2, name: title, item: url }] },

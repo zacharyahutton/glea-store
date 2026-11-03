@@ -31,9 +31,9 @@ export function Media({ slot, sizes = "100vw", priority = false, alt, color }: {
         <source media={MOBILE_MQ} srcSet={mSet} sizes={sizes} width={img.mobile.w} height={img.mobile.h} />
         <source media={DESKTOP_MQ} srcSet={dSet} sizes={sizes} />
         {/* eslint-disable-next-line @next/next/no-img-element, jsx-a11y/alt-text */}
-        <img {...rest} fetchPriority={priority ? "high" : undefined} />
+        <img {...rest} className={img.cutout ? "is-cut" : undefined} fetchPriority={priority ? "high" : undefined} />
       </picture>
     );
   }
-  return <Image src={img.src} alt={a} width={img.w} height={img.h} sizes={sizes} priority={priority} />;
+  return <Image src={img.src} alt={a} width={img.w} height={img.h} sizes={sizes} priority={priority} className={img.cutout ? "is-cut" : undefined} />;
 }

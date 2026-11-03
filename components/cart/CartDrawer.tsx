@@ -34,8 +34,8 @@ export function CartDrawer() {
   const count = cart?.totalQuantity ?? 0;
   return (
     <>
-      <div className={`scrim${open ? " is-open" : ""}`} onClick={() => setOpen(false)} aria-hidden="true" />
-      <div ref={panelRef} className={`drawer drawer--right${open ? " is-open" : ""}`} role="dialog" aria-modal="true" aria-labelledby="cart-title" aria-hidden={!open} inert={!open}>
+      <div className={`scrim scrim--cart${open ? " is-open" : ""}`} onClick={() => setOpen(false)} aria-hidden="true" />
+      <div ref={panelRef} className={`drawer drawer--right drawer--cart${open ? " is-open" : ""}`} role="dialog" aria-modal="true" aria-labelledby="cart-title" aria-hidden={!open} inert={!open}>
         <div className="drawer__head">
           <h2 id="cart-title" className="h3">Your cart {count ? <span className="muted small">({count})</span> : null}</h2>
           <button ref={closeRef} className="icon-btn" onClick={() => setOpen(false)} aria-label="Close cart"><Icon name="close" /></button>
@@ -48,7 +48,10 @@ export function CartDrawer() {
             <div className="empty">
               <p className="h3">Your cart is empty</p>
               <p className="muted">Pick a color and it will show up here.</p>
-              <Link className="btn btn--primary" href="/products/glea-clip-on-book-reading-light" onClick={() => setOpen(false)}>Shop the light</Link>
+              <div className="empty__btns">
+                <Link className="btn btn--primary" href="/products/glea-clip-on-book-reading-light" onClick={() => setOpen(false)}>Shop the light</Link>
+                <Link className="btn btn--ghost" href="/collections/all" onClick={() => setOpen(false)}>See all 6 colors</Link>
+              </div>
             </div>
           )}
           {error ? <p className="notice" role="alert" style={{ marginTop: 16 }}>{error}</p> : null}

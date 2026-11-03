@@ -1,142 +1,132 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import Image from "next/image";
 import { shopify } from "@/lib/shopify";
-import { site } from "@/lib/site";
-import { faqs, known, aplus } from "@/lib/content";
-import { Benefits, Moments, Compare, AiNote } from "@/components/home/Sections";
-import { Stats, Story } from "@/components/home/Showcase";
-import { ColorCard } from "@/components/product/ColorCard";
+import { site, formatMoney } from "@/lib/site";
+import { AiNote } from "@/components/home/Sections";
 import { Media } from "@/components/ui/Media";
-import { Icon } from "@/components/ui/Icon";
-import { FaqList } from "@/components/ui/Faq";
 import { JsonLd } from "@/components/ui/JsonLd";
-import { resolveColorImages } from "@/lib/media-server";
+import { SpecRings, GoodToKnow, ImgPanel } from "@/components/lf/Blocks";
+import { Tabs } from "@/components/lf/Tabs";
+import { DimDemo } from "@/components/lf/DimDemo";
+import type { SlotName } from "@/lib/media";
 
 export const revalidate = 300;
 export const metadata: Metadata = { alternates: { canonical: "/" } };
 
-const slugify = (s: string) => s.toLowerCase().replace(/\s+/g, "-");
-
+/** Home, in Loftie's section order (see T-048-loftie-analysis.md, home map). */
 export default async function Home() {
   const product = await shopify.product(site.productHandle);
   const pdp = `/products/${site.productHandle}`;
-  const price = product ? `$${parseFloat(product.priceRange.minVariantPrice.amount).toFixed(2)}` : "";
-  const homeFaq = known(faqs).filter((f) => ["What colors are there?", "How long does the battery last?", "Will it bother my partner?", "Does it fit hardcovers and paperbacks?", "Do you offer free shipping?", "What is your return policy?"].includes(f.q));
-  const inline = ["amber", "lake-blue", "pink"].map((c) => resolveColorImages(c)[0]).filter(Boolean);
-  const dark = aplus.find((a) => a.slot === "APLUS-02")!;
+  const price = product ? formatMoney(product.priceRange.minVariantPrice.amount) : "";
+  const who: { slot: SlotName; t: string; s: string }[] = [
+    { slot: "LIFE-SOFA", t: "Reading in bed", s: "Clip, bend, read" },
+    { slot: "LIFE-PARTNER", t: "Next to a sleeper", s: "The glow stays on your page" },
+    { slot: "LIFE-TRAVEL", t: "Travel", s: "63 g, rechargeable" },
+    { slot: "LIFE-GIFT", t: "A gift", s: "Six colors to pick from" },
+  ];
+  const tabs = [
+    { id: "bed", label: "Reading in bed", quote: "Clip it to your book, bend the neck, and the glow lands right on your page.", slot: "LIFE-HANDS" as SlotName, chip: "Warm", chipV: "3000K" },
+    { id: "sleeper", label: "Next to a sleeper", quote: "The light points down at your page, so most of the room stays dark.", slot: "LIFE-NIGHTSTAND" as SlotName, chip: "Hold 4 s", chipV: "100% to 10%" },
+    { id: "travel", label: "Travel", quote: "It weighs 63 g and charges by USB, so it packs right next to your book.", slot: "LIFE-ARMCHAIR" as SlotName, chip: "Up to", chipV: "80 h per charge" },
+    { id: "gift", label: "Gifting", quote: "Six colors, so there is one for every reader on your list.", slot: "LIFE-UGC" as SlotName, chip: "Colors", chipV: "6" },
+  ];
   return (
     <>
-      <section className="xhero" aria-labelledby="hero-title">
-        <div className="xhero__media"><Media slot="HERO-01" priority sizes="100vw" /></div>
-        <div className="xhero__shade" aria-hidden="true" />
-        <div className="container xhero__in">
-          <span className="pill pill--glass">Clip-on book light{price ? ` · ${price}` : ""}</span>
-          <h1 id="hero-title" className="xhero__title">Soft light,<br /><em>after dark.</em></h1>
-          <div className="xhero__foot">
-            <p className="xhero__sub">A warm glow that stays on your page, so the room stays dark. Six colors. Rechargeable.</p>
-            <div className="xhero__cta">
-              <Link className="btn btn--glow btn--lg" href={pdp}>Shop the light <Icon name="arrow" size={18} /></Link>
-              <Link className="btn btn--glass btn--lg" href="#colors">See the colors</Link>
+      <section className="lf-hero" aria-labelledby="hero-title">
+        <div className="lf-hero__media"><Media slot="HERO-01" priority sizes="100vw" /></div>
+        <div className="lf-hero__shade" aria-hidden="true" />
+        <div className="lf-hero__in">
+          <h1 id="hero-title" className="lf-hero__t">Soft light, after dark.</h1>
+          <p className="lf-hero__s">A clip-on book light with a warm glow that stays on your page, so the room stays dark. Six colors. Rechargeable.</p>
+          <Link className="btn btn--cream" href={pdp}>Shop the light</Link>
+        </div>
+      </section>
+
+      <SpecRings />
+
+      <section className="lf-sec" aria-labelledby="who-title">
+        <div className="lf-wrap">
+          <div className="lf-who">
+            <h2 id="who-title" className="lf-h2 lf-center">Who is it for?</h2>
+            <p className="lf-sub lf-center">Pick a reader. Every Glea comes with the same soft light.</p>
+            <div className="lf-rail lf-who__grid" data-rv-group>
+              {who.map((w) => (
+                <Link key={w.t} href="/collections/all" className="lf-who__card">
+                  <div className="lf-who__img lf-zoom"><Media slot={w.slot} sizes="(min-width: 1000px) 22vw, 60vw" /></div>
+                  <h3 className="lf-who__t">{w.t}</h3>
+                  <p className="lf-who__s">{w.s}</p>
+                </Link>
+              ))}
+            </div>
+            <div className="lf-center"><Link className="btn btn--navy" href="/collections/all">Shop all colors</Link></div>
+          </div>
+        </div>
+      </section>
+
+      <section className="lf-sec lf-sec--top0" aria-labelledby="pair-title">
+        <div className="lf-wrap lf-text">
+          <h2 id="pair-title" className="lf-h2 lf-center">A soft glow for every night</h2>
+          <div className="lf-pair" data-rv-group>
+            <Link href={pdp} className="lf-pcard">
+              <div className="lf-pcard__img lf-zoom"><Media slot="STUDIO-NAVY" sizes="(min-width: 1000px) 40vw, 90vw" /></div>
+              <div className="lf-pcard__row"><h3 className="lf-pcard__t">Glea book light</h3><span className="lf-pcard__p">{price}</span></div>
+              <p className="lf-pcard__d">Clip-on, bendable neck, 3 light colors, six colors to choose from.</p>
+            </Link>
+            <Link href={pdp} className="lf-pcard">
+              <div className="lf-pcard__img lf-zoom"><Media slot="LINEUP" sizes="(min-width: 1000px) 40vw, 90vw" /></div>
+              <div className="lf-pcard__row"><h3 className="lf-pcard__t">Buy 2, save ${site.bundle.save}</h3><span className="lf-pcard__p">2 lights</span></div>
+              <p className="lf-pcard__d">One for you, one for the reader next to you. $5 comes off at checkout.</p>
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      <section className="lf-sec lf-sec--top0" aria-labelledby="split-title">
+        <div className="lf-wrap">
+          <div className="lf-split" data-rv>
+            <div className="lf-split__img">
+              <Media slot="LIFE-NIGHTSTAND" sizes="(min-width: 1000px) 50vw, 100vw" />
+              <span className="lf-chip" aria-hidden="true"><small>Warm</small>3000K</span>
+            </div>
+            <div className="lf-split__txt">
+              <h2 id="split-title" className="lf-h2">Your page glows. The room stays dark.</h2>
+              <p>The light points down at your page, not across the room. Bend the neck to aim it, and hold the button to dim it right down.</p>
+              <Link className="btn btn--navy" href={`${pdp}#how-it-works`}>See how it works</Link>
             </div>
           </div>
         </div>
       </section>
 
-      <section className="sec intro" aria-labelledby="intro-title">
-        <div className="container">
-          <span className="kicker" data-rv>The Glea reading light</span>
-          <h2 id="intro-title" className="intro__text" data-rv>
-            A small light that clips to your book{inline[0] ? <span className="intro__img" aria-hidden="true"><Image src={inline[0]} alt="" width={120} height={120} sizes="120px" /></span> : null} and aims a soft glow at your words{inline[1] ? <span className="intro__img" aria-hidden="true"><Image src={inline[1]} alt="" width={120} height={120} sizes="120px" /></span> : null} so you can read one more chapter while the room sleeps{inline[2] ? <span className="intro__img" aria-hidden="true"><Image src={inline[2]} alt="" width={120} height={120} sizes="120px" /></span> : null}
-          </h2>
+      <section className="lf-sec" aria-labelledby="tabs-title">
+        <div className="lf-wrap">
+          <h2 id="tabs-title" className="lf-h2 lf-center lf-h2--xl">Turn the big light off.<br /><em>Glea has the rest.</em></h2>
+          <Tabs label="Ways to read with Glea" items={tabs.map((t) => ({
+            id: t.id, label: t.label, quote: t.quote,
+            media: <Media slot={t.slot} sizes="(min-width: 1000px) 34vw, 90vw" />,
+            side: <div className="lf-tabs__card"><small>{t.chip}</small><strong>{t.chipV}</strong><Link className="lnk" href={pdp}>Shop the light</Link></div>,
+          }))} />
         </div>
       </section>
 
-      <Stats />
-
-      <section className="sec" id="colors" aria-labelledby="lineup-title">
-        <div className="container">
-          <div className="sec-head" data-rv>
-            <div><span className="kicker">Six colors{price ? ` · ${price}` : ""}</span><h2 id="lineup-title" className="h1">Find your reading light</h2></div>
-            <Link className="btn btn--ghost" href="/collections/all">Shop all colors <Icon name="arrow" size={18} /></Link>
-          </div>
-          {product ? <div className="lineup lineup--big">{product.variants.map((v) => <ColorCard key={v.id} product={product} variant={v} sizes="(min-width: 1100px) 30vw, (min-width: 768px) 45vw, 78vw" />)}</div> : null}
+      <section className="lf-sec" aria-labelledby="dim-title">
+        <div className="lf-wrap lf-text">
+          <h2 id="dim-title" className="lf-h2 lf-center">One button. Your glow.</h2>
+          <DimDemo />
         </div>
       </section>
 
-      <section className="sec sec--story" aria-labelledby="story-title">
-        <div className="container">
-          <div className="sec-head" data-rv><div><span className="kicker">How it works</span><h2 id="story-title" className="h1">Made for one more chapter</h2></div></div>
-          <Story />
-        </div>
-      </section>
-
-      <section className="band" aria-labelledby="band-title">
-        <div className="band__media"><Media slot="APLUS-02" sizes="100vw" /></div>
-        <div className="band__shade" aria-hidden="true" />
-        <div className="container band__in">
-          <span className="kicker kicker--glow" data-rv>Why Glea</span>
-          <h2 id="band-title" className="band__title" data-rv>{dark.heading}</h2>
-          <p className="lead" data-rv>{dark.sub}</p>
-        </div>
-      </section>
-
-      <section className="sec" aria-labelledby="why-title">
-        <div className="container">
-          <h2 id="why-title" className="sr-only">Why readers pick Glea</h2>
-          <Benefits />
-        </div>
-      </section>
-
-      <section className="sec sec--white" aria-labelledby="cmp-title">
-        <div className="container split">
-          <div data-rv>
-            <span className="kicker">Compare</span>
-            <h2 id="cmp-title" className="h1" style={{ margin: "12px 0 20px" }}>Made for reading after dark.</h2>
-            <p className="lead">Glea clips to your book and aims a soft glow at your page, so your hands stay free.</p>
-            <div className="btn-row">
-              <Link className="btn btn--primary btn--lg" href={pdp}>Shop the light</Link>
-              <Link className="btn btn--ghost btn--lg" href={`${pdp}#how-it-works`}>How it works</Link>
-            </div>
-          </div>
-          <div data-rv><Compare /></div>
-        </div>
-      </section>
-
-      <section className="sec" aria-labelledby="moments-title">
-        <div className="container">
-          <div className="sec-head" data-rv><div><span className="kicker">Where it goes</span><h2 id="moments-title" className="h1">Made for reading after dark</h2></div></div>
-          <Moments />
-        </div>
-      </section>
-
-      <section className="sec sec--tight" aria-label="Glea on Instagram">
-        <div className="container">
-          <div className="creator" data-rv>
-            <Media slot="CREATOR" sizes="100vw" />
-            <div className="creator__in">
-              <span className="kicker kicker--glow">Night readers</span>
-              <h2 className="h1">Show us your reading corner.</h2>
-              <p>Tag {site.instagramHandle} on Instagram.</p>
-              <a className="btn btn--glow btn--lg" style={{ justifySelf: "start" }} href={site.instagram} target="_blank" rel="noopener noreferrer">Follow {site.instagramHandle}</a>
-            </div>
+      <section className="lf-sec lf-sec--top0" aria-label="More from Glea">
+        <div className="lf-wrap">
+          <div className="lf-duo">
+            <ImgPanel slot="INBOX" title={<>In the box</>} text="Your Glea light, a USB charging cable and a silicone page-follower bookmark." cta="See what is inside" href={`${pdp}#in-the-box`} note="Bookmark shown as an illustration" />
+            <ImgPanel slot="LIFE-PARTNER" title={<>Read without<br />waking them</>} text="A warm glow on your page, a dark room for them." cta="Shop all colors" href="/collections/all" />
           </div>
         </div>
       </section>
 
-      <section className="sec sec--white" aria-labelledby="hfaq-title">
-        <div className="container faq-split">
-          <div data-rv>
-            <span className="kicker">Questions</span>
-            <h2 id="hfaq-title" className="h1" style={{ marginTop: 12 }}>Good to know</h2>
-            <p style={{ marginTop: 20 }}><Link className="link-arrow" href="/pages/faq">All FAQs <Icon name="arrow" size={18} /></Link></p>
-          </div>
-          <div>
-            <FaqList items={homeFaq} />
-            <div style={{ marginTop: 32 }}><AiNote /></div>
-          </div>
-        </div>
-      </section>
+      <GoodToKnow />
+
+      <div className="lf-wrap"><AiNote /></div>
 
       <JsonLd data={{ "@context": "https://schema.org", "@type": "WebSite", name: site.name, url: site.url, potentialAction: { "@type": "SearchAction", target: `${site.url}/search?q={search_term_string}`, "query-input": "required name=search_term_string" } }} />
     </>

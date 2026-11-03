@@ -4,13 +4,17 @@ import { notFound } from "next/navigation";
 import { shopify } from "@/lib/shopify";
 import { site, slugify } from "@/lib/site";
 import { faqs, features, known } from "@/lib/content";
-import { gallerySlots, featureSlots, type SlotName } from "@/lib/media";
-import { resolveColorImages, resolveSlot } from "@/lib/media-server";
+import { gallerySlots, type SlotName } from "@/lib/media";
+import { resolveColorImages, resolveSlot, hasDrop } from "@/lib/media-server";
+const glowSlots: SlotName[] = ["GLOW-3000", "GLOW-4500", "GLOW-6000"];
 import { ProductView, type ColorMedia, type Slide } from "@/components/product/ProductView";
 import { ColorCard, colorOf } from "@/components/product/ColorCard";
-import { APlus, Compare, Spec, AiNote } from "@/components/home/Sections";
-import { Stats } from "@/components/home/Showcase";
-import { FaqList, linkText } from "@/components/ui/Faq";
+import { Spec, AiNote } from "@/components/home/Sections";
+import { ImgPanel } from "@/components/lf/Blocks";
+import { Rail } from "@/components/lf/Rail";
+import { GlowPicker } from "@/components/lf/GlowPicker";
+import { WaysToUse } from "@/components/lf/WaysToUse";
+import { FaqList } from "@/components/ui/Faq";
 import { Icon } from "@/components/ui/Icon";
 import { Media } from "@/components/ui/Media";
 import { JsonLd } from "@/components/ui/JsonLd";
@@ -56,92 +60,139 @@ export default async function ProductPage({ params }: { params: Promise<{ handle
   const description = plain(product.descriptionHtml) || site.description;
   const imgs = shared.filter((s): s is Exclude<Slide, { placeholder: true }> => !("placeholder" in s)).map((s) => (s.src.startsWith("http") ? s.src : `${site.url}${s.src}`));
 
+  const pdp = `/products/${product.handle}`;
+  const atHome: SlotName[] = ["LIFE-HANDS", "LIFE-PARTNER", "LIFE-SOFA", "LIFE-TRAVEL", "LIFE-ARMCHAIR", "LIFE-GIFT", "LIFE-UGC"];
+  const strip = ["9 LEDs", "3 light colors", "Up to 80 h per charge", "1000mAh battery", "63 g", "Hold 4 s to dim"];
+  const icons = [...features, { icon: "moon", title: "Dims to 10%", text: "Hold 4 s to dim from 100% to 10%." }];
+
   return (
     <>
-      <div className="container">
-        <nav className="crumbs" aria-label="Breadcrumb">
-          <Link href="/">Home</Link><span aria-hidden="true">/</span>
-          <Link href="/collections/all">Shop</Link><span aria-hidden="true">/</span>
-          <span aria-current="page">{product.title}</span>
-        </nav>
-        <ProductView product={product} shared={shared} colorMedia={colorMedia}>
-          {product.descriptionHtml ? <div className="prose small" style={{ marginTop: 20 }} dangerouslySetInnerHTML={{ __html: product.descriptionHtml }} /> : <p className="muted" style={{ marginTop: 20 }}>{site.description}</p>}
-          <ul className="feat">
-            {features.map((f) => <li key={f.title}><Icon name={f.icon} size={20} /><span><strong>{f.title}.</strong> {f.text}</span></li>)}
+      <nav className="crumbs sr-only" aria-label="Breadcrumb">
+        <Link href="/">Home</Link><span aria-hidden="true">/</span>
+        <Link href="/collections/all">Shop</Link><span aria-hidden="true">/</span>
+        <span aria-current="page">{product.title}</span>
+      </nav>
+      <ProductView product={product} shared={shared} colorMedia={colorMedia} bundleImg={hasDrop("BUNDLE") ? <Media slot="BUNDLE" sizes="120px" /> : undefined}>
+        <div className="lf-accs">
+          <details className="acc">
+            <summary><span>Description</span><Icon name="plus" size={18} className="plus" /></summary>
+            <div className="acc__body">
+              {product.descriptionHtml ? <div className="prose" dangerouslySetInnerHTML={{ __html: product.descriptionHtml }} /> : <p>{site.description}</p>}
+            </div>
+          </details>
+          <details className="acc">
+            <summary><span>Key features</span><Icon name="plus" size={18} className="plus" /></summary>
+            <div className="acc__body">
+              <ul className="feat">
+                {features.map((f) => <li key={f.title}><Icon name={f.icon} size={20} /><span><strong>{f.title}.</strong> {f.text}</span></li>)}
+              </ul>
+            </div>
+          </details>
+          <details className="acc" id="specs">
+            <summary><span>Specs and what is in the box</span><Icon name="plus" size={18} className="plus" /></summary>
+            <div className="acc__body"><Spec /></div>
+          </details>
+        </div>
+      </ProductView>
+
+      <section className="lf-strip" aria-label="Maker's specs">
+        <ul>{strip.map((t) => <li key={t}>{t}</li>)}</ul>
+      </section>
+
+      <section className="lf-sec" aria-labelledby="feat-title">
+        <div className="lf-wrap lf-text">
+          <h2 id="feat-title" className="lf-h2 lf-center">Everything you need to read at night</h2>
+          <ul className="lf-icons" data-rv-group>
+            {icons.map((f) => <li key={f.title}><Icon name={f.icon} size={26} /><span>{f.title}</span></li>)}
           </ul>
-          <div className="info-blocks">
-            <details className="acc">
-              <summary><span><Icon name="truck" size={20} />Shipping</span><Icon name="plus" size={20} className="plus" /></summary>
-              <div className="acc__body"><p>We ship within the United States. Orders of ${site.freeShippingThreshold} or more ship free. Orders under ${site.freeShippingThreshold} ship for a flat ${site.flatShipping.toFixed(2)}. <Link href="/policies/shipping-policy">Shipping policy</Link></p></div>
-            </details>
-            <details className="acc">
-              <summary><span><Icon name="return" size={20} />Returns</span><Icon name="plus" size={20} className="plus" /></summary>
-              <div className="acc__body"><p dangerouslySetInnerHTML={{ __html: linkText(`We accept returns within ${site.returnDays} days. Email hello@getglea.com with your order number to start one.`) }} /><p><Link href="/policies/refund-policy">Refund policy</Link></p></div>
-            </details>
-            <details className="acc">
-              <summary><span><Icon name="box" size={20} />Details and what is in the box</span><Icon name="plus" size={20} className="plus" /></summary>
-              <div className="acc__body"><Spec /></div>
-            </details>
-          </div>
-        </ProductView>
-      </div>
+        </div>
+      </section>
 
-      <section className="sec sec--white" aria-labelledby="feat-title">
-        <div className="container">
-          <div className="sec-head"><div><span className="kicker">Features</span><h2 id="feat-title" className="h1">Made for reading after dark</h2></div></div>
-          <div className="grid grid-4">
-            {featureSlots.map((s) => (
-              <div className="frame ratio-1" data-rv key={s}><Media slot={s} sizes="(min-width: 1024px) 25vw, (min-width: 600px) 50vw, 100vw" /></div>
-            ))}
+      <section className="lf-sec lf-sec--top0" aria-label="Glea at night">
+        <div className="lf-wrap lf-stack">
+          <ImgPanel slot="LIFE-NIGHTSTAND" title="Clip it on. Keep reading." text="Clip Glea to your book, front or back cover, and bend the neck so the glow lands on your page." sizes="(min-width: 1000px) 92vw, 100vw" />
+          <ImgPanel slot="LIFE-PARTNER" title="Wind down without the big light." text="Hold the button for 4 seconds to dim from 100% to 10%, and keep the room dark for whoever is asleep." sizes="(min-width: 1000px) 92vw, 100vw" />
+        </div>
+      </section>
+
+      <section className="lf-sec lf-sec--top0" aria-labelledby="why-title">
+        <div className="lf-wrap lf-text">
+          <div className="lf-split lf-split--plain" data-rv>
+            <div className="lf-split__img"><Media slot="LIFE-HANDS" sizes="(min-width: 1000px) 50vw, 100vw" /></div>
+            <div className="lf-split__txt">
+              <h2 id="why-title" className="lf-h2">Your page glows. The room stays dark.</h2>
+              <p>The light points down at your page, not across the room. Some light may still be visible, especially at high brightness. Turning it down helps.</p>
+            </div>
           </div>
         </div>
       </section>
 
-      <Stats />
+      <section className="lf-sec lf-sec--top0" aria-labelledby="glow-title">
+        <div className="lf-wrap lf-text">
+          <h2 id="glow-title" className="lf-h2 lf-center">Pick your glow</h2>
+          <p className="lf-sub lf-center">Three light colors: warm 3000K, neutral 4500K and cool 6000K.</p>
+          <GlowPicker photo={<Media slot="LIFE-PLINTH" sizes="(min-width: 1000px) 60vw, 100vw" />} lights={glowSlots.every(hasDrop) ? glowSlots.map((g) => <Media key={g} slot={g} sizes="(min-width: 1000px) 30vw, 50vw" />) : undefined} />
+        </div>
+      </section>
 
-      <section className="sec" id="how-it-works" aria-labelledby="how-title">
-        <div className="container">
-          <div className="sec-head"><div><span className="kicker">How it works</span><h2 id="how-title" className="h1">Clip. Glow. Keep reading.</h2></div></div>
-          <div className="grid grid-3">
-            {[
-              { s: "HOW-01", t: "Clip it on", d: "Clip Glea to your book, front or back cover." },
-              { s: "HOW-02", t: "Aim the glow", d: "Bend the neck and set the brightness you like." },
-              { s: "HOW-03", t: "Keep reading", d: "The page glows. The room stays dark." },
-            ].map((h, i) => (
-              <div className="card card--flat" key={h.s}>
-                <div className="frame ratio-43"><Media slot={h.s as SlotName} sizes="(min-width: 768px) 33vw, 100vw" /></div>
-                <h3 className="h3"><span className="muted">0{i + 1}</span> {h.t}</h3>
-                <p className="muted">{h.d}</p>
-              </div>
-            ))}
+      <section className="lf-sec" id="how-it-works" aria-labelledby="how-title">
+        <div className="lf-wrap lf-text">
+          <h2 id="how-title" className="lf-h2 lf-center">How it works</h2>
+          <WaysToUse items={[
+            { id: "clip", title: "Clip it on", text: "Clip Glea to your book, front or back cover.", media: <Media slot="HOW-01" sizes="(min-width: 1000px) 55vw, 100vw" /> },
+            { id: "aim", title: "Aim the glow", text: "Bend the neck and set the brightness you like.", media: <Media slot="HOW-02" sizes="(min-width: 1000px) 55vw, 100vw" /> },
+            { id: "read", title: "Keep reading", text: "The page glows. The room stays dark.", media: <Media slot="HOW-03" sizes="(min-width: 1000px) 55vw, 100vw" /> },
+          ]} />
+          <div className="lf-alt" data-rv>
+            <div className="lf-alt__img lf-stage"><Media slot="MACRO-BUTTON" sizes="(min-width: 1000px) 45vw, 100vw" /></div>
+            <div className="lf-alt__txt">
+              <h3 className="lf-h2">Easy to control</h3>
+              <p>Switch it on, choose one of 3 light colors, and hold for 4 seconds to dim from 100% to 10%.</p>
+              <ul className="lf-callouts"><li><strong>9 LEDs</strong></li><li><strong>3 light colors</strong> 3000K, 4500K, 6000K</li><li><strong>Hold 4 s</strong> to dim to 10%</li></ul>
+            </div>
+          </div>
+          <div className="lf-alt lf-alt--flip" data-rv>
+            <div className="lf-alt__img lf-stage"><Media slot="BENT" sizes="(min-width: 1000px) 45vw, 100vw" /></div>
+            <div className="lf-alt__txt">
+              <h3 className="lf-h2">Bend it where you need it</h3>
+              <p>The flexible neck bends so the glow lands right where you are reading. It clips to hardcovers and paperbacks, and holds best on the back cover or on a hardcover.</p>
+              <p>Up to 80 hours per charge from a 1000mAh battery, by the maker&apos;s figures. Run time varies with brightness and light color.</p>
+            </div>
           </div>
         </div>
       </section>
 
-      <section className="sec sec--tint" aria-label="Product story">
-        <div className="container"><APlus /></div>
-      </section>
-
-      <section className="sec" aria-labelledby="cmp-title">
-        <div className="container narrow">
-          <h2 id="cmp-title" className="h1" style={{ marginBottom: 24 }}>Glea vs the usual ways to read at night</h2>
-          <Compare />
+      <section className="lf-sec lf-sec--top0" id="in-the-box" aria-label="In the box">
+        <div className="lf-wrap">
+          <ImgPanel slot="INBOX" title="In the box" text="Your Glea light, a USB charging cable and a silicone page-follower bookmark." cta="See all colors" href="/collections/all" note="Bookmark shown as an illustration" sizes="(min-width: 1000px) 92vw, 100vw" />
         </div>
       </section>
 
-      <section className="sec sec--white" aria-labelledby="faq-title">
-        <div className="container narrow">
-          <h2 id="faq-title" className="h1" style={{ marginBottom: 16 }}>Questions</h2>
+      <section className="lf-sec lf-sec--top0" aria-labelledby="home-title">
+        <div className="lf-wrap">
+          <h2 id="home-title" className="lf-h2 lf-center">Glea at home</h2>
+          <Rail label="Glea at home photos" className="lf-athome">
+            {atHome.map((s) => <div className="lf-athome__item" key={s}><Media slot={s} sizes="(min-width: 1000px) 20vw, 60vw" /></div>)}
+          </Rail>
+          <AiNote />
+        </div>
+      </section>
+
+      <section className="lf-sec" aria-labelledby="faq-title">
+        <div className="lf-wrap lf-narrow">
+          <h2 id="faq-title" className="lf-h2 lf-center">FAQs</h2>
           <FaqList items={pdpFaq} />
-          <p style={{ marginTop: 20 }}><Link className="link-arrow" href="/pages/faq">All FAQs <Icon name="arrow" size={18} /></Link></p>
+          <p className="lf-center" style={{ marginTop: 24 }}><Link className="lnk" href="/pages/faq">All FAQs</Link></p>
         </div>
       </section>
 
-      <section className="sec" aria-labelledby="colors-title">
-        <div className="container">
-          <div className="sec-head"><div><span className="kicker">Six colors</span><h2 id="colors-title" className="h1">Pick your glow</h2></div></div>
-          <div className="lineup">{product.variants.map((v) => <ColorCard key={v.id} product={product} variant={v} sizes="(min-width: 1100px) 16vw, (min-width: 768px) 33vw, 68vw" />)}</div>
-          <div style={{ marginTop: 32 }}><AiNote /></div>
+      <section className="lf-sec lf-sec--top0" aria-labelledby="colors-title">
+        <div className="lf-wrap lf-text">
+          <h2 id="colors-title" className="lf-h2 lf-center">More colors</h2>
+          <Rail label="All colors" className="lf-more">
+            {product.variants.map((v) => <div className="lf-more__item" key={v.id}><ColorCard product={product} variant={v} sizes="(min-width: 1000px) 25vw, 60vw" /></div>)}
+          </Rail>
+          <p className="lf-center" style={{ marginTop: 8 }}><Link className="lnk" href={pdp}>Back to top</Link></p>
         </div>
       </section>
 
