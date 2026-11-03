@@ -106,9 +106,9 @@ export function ProductView({ product, shared, colorMedia, initialColor, childre
               </>
             ) : null}
           </div>
-          <div className="gal__thumbs" role="list">
+          <div className="gal__thumbs">
             {slides.map((s, i) => (
-              <button key={i} role="listitem" className="gal__thumb" aria-current={i === idx} aria-label={`Show photo ${i + 1}`} onClick={() => setIdx(i)}>
+              <button key={i} className="gal__thumb" aria-current={i === idx} aria-label={`Show photo ${i + 1}`} onClick={() => setIdx(i)}>
                 {"placeholder" in s ? <Placeholder color={s.color} note={null} /> : <Image src={s.src} alt="" width={144} height={144} sizes="72px" />}
               </button>
             ))}

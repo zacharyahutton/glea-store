@@ -6,9 +6,9 @@
 export type Slot = { file: string; mobile?: string; alt: string; w: number; h: number; mw?: number; mh?: number; label?: string; note?: string };
 
 export const slots = {
-  "HERO-01": { file: "glea-hero-01-d-2000.webp", mobile: "glea-hero-01-m-1100.webp", alt: "Reader in bed with a Glea light clipped to a book", w: 2000, h: 929, mw: 1100, mh: 1500 },
-  "HERO-02": { file: "glea-hero-02-d-2000.webp", mobile: "glea-hero-02-m-1100.webp", alt: "Glea light glowing on an open book at night", w: 2000, h: 929, mw: 1100, mh: 1500 },
-  "HERO-03": { file: "glea-hero-03-d-2000.webp", mobile: "glea-hero-03-m-1100.webp", alt: "Glea lights in several colors on a sunlit shelf", w: 2000, h: 929, mw: 1100, mh: 1500 },
+  "HERO-01": { file: "glea-hero-01-d-2000.webp", mobile: "glea-hero-01-m-750.webp", alt: "Reader in bed with a Glea light clipped to a book", w: 2000, h: 929, mw: 750, mh: 1023 },
+  "HERO-02": { file: "glea-hero-02-d-2000.webp", mobile: "glea-hero-02-m-750.webp", alt: "Glea light glowing on an open book at night", w: 2000, h: 929, mw: 750, mh: 1023 },
+  "HERO-03": { file: "glea-hero-03-d-2000.webp", mobile: "glea-hero-03-m-750.webp", alt: "Glea lights in several colors on a sunlit shelf", w: 2000, h: 929, mw: 750, mh: 1023 },
   "GAL-01": { file: "glea-gal-01-main-studio-1100.webp", alt: "Black Glea book light clipped to an open book", w: 1100, h: 1100 },
   "GAL-02": { file: "glea-gal-02-lineup-1100.webp", alt: "Six colors. One soft glow. Glea in Black, Amber, Pink, Purple, Lake Blue and White, with 9 LEDs, 3 light colors, dims 100% to 10%, up to 80 hours", w: 1100, h: 1100 },
   "GAL-03": { file: "glea-gal-03-brightness-1100.webp", alt: "Find your glow: 9 LED light panel, 3 light colors (warm 3000K, neutral 4500K, cool 6000K), hold 4 seconds to dim from 100% to 10%", w: 1100, h: 1100 },

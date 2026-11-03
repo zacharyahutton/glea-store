@@ -1,4 +1,4 @@
-"""Glea storefront QA: overflow, console errors, JSON-LD, analytics events.
+"""Glea storefront QA: overflow, console errors, JSON-LD, broken images, alt text, analytics events.
 Run: python3 qa/qa.py [base_url]   (server must be running, e.g. PORT=3100 npm start)"""
 import json, sys
 from playwright.sync_api import sync_playwright
@@ -26,11 +26,16 @@ with sync_playwright() as p:
               document.querySelectorAll('body *').forEach(el => { const r = el.getBoundingClientRect();
                 if (r.width && (r.right > W + 1) && getComputedStyle(el).position !== 'fixed' && !el.closest('[aria-hidden=true],.hero__track,.gal__track,.marquee,[inert]')) bad.push(el.tagName + '.' + el.className.toString().slice(0,40)); });
               return { sw: document.documentElement.scrollWidth, W, bad: bad.slice(0,5) }; }""")
+            pg.evaluate("""async () => { for (let y = 0; y < document.body.scrollHeight; y += 600) { window.scrollTo(0, y); await new Promise(r => setTimeout(r, 60)); } window.scrollTo(0, 0); }""")
+            pg.wait_for_load_state("networkidle")
+            img = pg.evaluate("""() => { const all = [...document.querySelectorAll('img')];
+              return { n: all.length, noalt: all.filter(i => !i.hasAttribute('alt')).map(i => i.currentSrc || i.src).slice(0,3),
+                broken: all.filter(i => i.complete && i.naturalWidth === 0 && (i.currentSrc || i.src)).map(i => i.currentSrc || i.src).slice(0,3) }; }""")
             ld = pg.evaluate("""() => [...document.querySelectorAll('script[type="application/ld+json"]')].map(s => { try { const j = JSON.parse(s.textContent); return [].concat(j).map(x => x['@type']).join(','); } catch (e) { return 'PARSE_ERROR'; } })""")
             errs = [e for e in errs if "404" not in e or path != "/nope-404"]
-            ok = over["sw"] <= over["W"] and not errs and "PARSE_ERROR" not in ld
+            ok = r.status == (404 if path == "/nope-404" else 200) and over["sw"] <= over["W"] and not errs and "PARSE_ERROR" not in ld and not img["noalt"] and not img["broken"]
             fail += not ok
-            report["pages"].append({"w": w, "path": path, "status": r.status, "overflow": over["sw"] - over["W"], "bad": over["bad"], "console": errs[:3], "jsonld": ld, "ok": ok})
+            report["pages"].append({"w": w, "path": path, "status": r.status, "overflow": over["sw"] - over["W"], "bad": over["bad"], "console": errs[:3], "jsonld": ld, "imgs": img["n"], "noalt": img["noalt"], "broken": img["broken"], "ok": ok})
             pg.close()
         ctx.close()
 
