@@ -45,14 +45,14 @@ with sync_playwright() as p:
     if banner.count(): banner.first.click()
     pg.wait_for_timeout(500)
     pg.locator(".pdp__info .btn--primary.btn--block").first.click()
-    pg.wait_for_timeout(800)
+    pg.wait_for_timeout(5000)
     utm = pg.evaluate("() => localStorage.getItem('glea_utm_v1')")
     seen = []
-    pg.route("**/*myshopify.com/**", lambda route: (seen.append(route.request.url), route.abort()))
+    pg.route("**/*", lambda route: (seen.append(route.request.url), route.abort()) if route.request.is_navigation_request() and not route.request.url.startswith(BASE) else route.continue_())
     co = pg.get_by_role("button", name="Checkout")
     if co.count():
         co.first.click()
-        pg.wait_for_timeout(1500)
+        pg.wait_for_timeout(4000)
     ev = [t.split()[2] for t in logged]
     report["events"] = {"utm_stored": utm, "checkout_target": [u.split("?")[0] for u in seen][:1], "events": ev}
     b.close()
