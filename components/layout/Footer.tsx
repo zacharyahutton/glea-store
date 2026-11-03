@@ -13,9 +13,9 @@ export function Footer({ shop, help, policies }: { shop: MenuItem[]; help: MenuI
         <div className="footer__grid">
           <div>
             <Link href="/" className="logo"><span className="logo__dot" aria-hidden="true" />glea</Link>
-            <p className="muted" style={{ marginTop: 14, maxWidth: "38ch" }}>A clip-on book light for reading in bed. Your page glows. The room stays dark.</p>
+            <p className="footer__muted" style={{ marginTop: 14, maxWidth: "38ch" }}>Soft light, after dark. A clip-on book light for reading in bed. Your page glows. The room stays dark.</p>
             <h2 style={{ marginTop: 28 }}>Join the night readers</h2>
-            <p className="muted small">New colors and reading notes, now and then. No spam.</p>
+            <p className="footer__muted small">New colors and reading notes, now and then. No spam.</p>
             <FooterSignup />
           </div>
           <div>
@@ -38,6 +38,7 @@ export function Footer({ shop, help, policies }: { shop: MenuItem[]; help: MenuI
             </ul>
           </div>
         </div>
+        <p className="footer__word" aria-hidden="true">glea<span className="logo__dot" /></p>
         <div className="footer__base">
           <p>© {year} Glea. Checkout is powered by Shopify.</p>
           <a href={site.instagram} target="_blank" rel="noopener noreferrer" style={{ display: "inline-flex", gap: 8, alignItems: "center" }}>

@@ -12,3 +12,4 @@ next-env.d.ts
 !.env.example
 *token*.txt
 qa/qa-report.json
+qa/shots/

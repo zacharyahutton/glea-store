@@ -9,6 +9,7 @@ import { resolveColorImages, resolveSlot } from "@/lib/media-server";
 import { ProductView, type ColorMedia, type Slide } from "@/components/product/ProductView";
 import { ColorCard, colorOf } from "@/components/product/ColorCard";
 import { APlus, Compare, Spec, AiNote } from "@/components/home/Sections";
+import { Stats } from "@/components/home/Showcase";
 import { FaqList, linkText } from "@/components/ui/Faq";
 import { Icon } from "@/components/ui/Icon";
 import { Media } from "@/components/ui/Media";
@@ -87,18 +88,20 @@ export default async function ProductPage({ params }: { params: Promise<{ handle
 
       <section className="sec sec--white" aria-labelledby="feat-title">
         <div className="container">
-          <div className="sec-head"><div><span className="kicker">Features</span><h2 id="feat-title" className="h2">Made for reading after dark</h2></div></div>
+          <div className="sec-head"><div><span className="kicker">Features</span><h2 id="feat-title" className="h1">Made for reading after dark</h2></div></div>
           <div className="grid grid-4">
             {featureSlots.map((s) => (
-              <div className="frame ratio-1" key={s}><Media slot={s} sizes="(min-width: 1024px) 25vw, (min-width: 600px) 50vw, 100vw" /></div>
+              <div className="frame ratio-1" data-rv key={s}><Media slot={s} sizes="(min-width: 1024px) 25vw, (min-width: 600px) 50vw, 100vw" /></div>
             ))}
           </div>
         </div>
       </section>
 
+      <Stats />
+
       <section className="sec" id="how-it-works" aria-labelledby="how-title">
         <div className="container">
-          <div className="sec-head"><div><span className="kicker">How it works</span><h2 id="how-title" className="h2">Clip. Glow. Keep reading.</h2></div></div>
+          <div className="sec-head"><div><span className="kicker">How it works</span><h2 id="how-title" className="h1">Clip. Glow. Keep reading.</h2></div></div>
           <div className="grid grid-3">
             {[
               { s: "HOW-01", t: "Clip it on", d: "Clip Glea to your book, front or back cover." },
@@ -121,14 +124,14 @@ export default async function ProductPage({ params }: { params: Promise<{ handle
 
       <section className="sec" aria-labelledby="cmp-title">
         <div className="container narrow">
-          <h2 id="cmp-title" className="h2" style={{ marginBottom: 24 }}>Glea vs the usual ways to read at night</h2>
+          <h2 id="cmp-title" className="h1" style={{ marginBottom: 24 }}>Glea vs the usual ways to read at night</h2>
           <Compare />
         </div>
       </section>
 
       <section className="sec sec--white" aria-labelledby="faq-title">
         <div className="container narrow">
-          <h2 id="faq-title" className="h2" style={{ marginBottom: 16 }}>Questions</h2>
+          <h2 id="faq-title" className="h1" style={{ marginBottom: 16 }}>Questions</h2>
           <FaqList items={pdpFaq} />
           <p style={{ marginTop: 20 }}><Link className="link-arrow" href="/pages/faq">All FAQs <Icon name="arrow" size={18} /></Link></p>
         </div>
@@ -136,7 +139,7 @@ export default async function ProductPage({ params }: { params: Promise<{ handle
 
       <section className="sec" aria-labelledby="colors-title">
         <div className="container">
-          <div className="sec-head"><div><span className="kicker">Six colors</span><h2 id="colors-title" className="h2">Pick your glow</h2></div></div>
+          <div className="sec-head"><div><span className="kicker">Six colors</span><h2 id="colors-title" className="h1">Pick your glow</h2></div></div>
           <div className="lineup">{product.variants.map((v) => <ColorCard key={v.id} product={product} variant={v} sizes="(min-width: 1100px) 16vw, (min-width: 768px) 33vw, 68vw" />)}</div>
           <div style={{ marginTop: 32 }}><AiNote /></div>
         </div>

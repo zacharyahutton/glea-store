@@ -11,9 +11,9 @@ export const known = <T extends { a?: string; q?: string; value?: string; text?:
 export const faqs: QA[] = [
   { topic: "light", q: "What colors are there?", a: "Six: Black, Amber, Pink, Purple, Lake Blue and White." },
   { topic: "light", q: "What is in the box?", a: "A reading light in your color, a charging cable and a silicone page-follower bookmark." },
-  { topic: "light", q: "How long does the battery last?", a: "TODO(zach): battery hours from the supplier." },
-  { topic: "light", q: "How do I charge it?", a: "TODO(zach): cable type and charge time." },
-  { topic: "light", q: "How bright is it?", a: "The brightness is adjustable, so you can keep it soft." },
+  { topic: "light", q: "How long does the battery last?", a: "Up to 80 hours per charge from a 1000mAh battery, by the maker's figures. Run time varies with brightness and light color." },
+  { topic: "light", q: "How do I charge it?", a: "Plug it in with the USB charging cable that comes in the box." },
+  { topic: "light", q: "How bright is it?", a: "It has 9 LEDs and 3 light colors: warm (3000K), neutral (4500K) and cool (6000K). The brightness is adjustable, so you can keep it soft." },
   { topic: "light", q: "Will it bother my partner?", a: "The light points at your page, so most of the room stays dark. Some light may still be visible, especially at high brightness. Turning it down helps." },
   { topic: "light", q: "Does it fit hardcovers and paperbacks?", a: "It clips to both. It holds best on the back cover or on a hardcover." },
   { topic: "order", q: "How long does US shipping take?", a: "TODO(zach): US delivery time in business days." },
@@ -71,12 +71,14 @@ export const compare = {
 
 export const details = [
   { label: "Colors", value: "Black, Amber, Pink, Purple, Lake Blue, White" },
-  { label: "Power", value: "Rechargeable" },
+  { label: "Power", value: "Rechargeable, 1000mAh battery" },
+  { label: "Run time", value: "Up to 80 hours per charge (maker's figure, varies with brightness and light color)" },
+  { label: "Light", value: "9 LEDs, 3 light colors (3000K, 4500K, 6000K)" },
   { label: "Brightness", value: "Adjustable" },
+  { label: "Weight", value: "63 g" },
   { label: "In the box", value: "Reading light, charging cable, silicone page-follower bookmark" },
-  { label: "Battery life", value: "TODO(zach) hours" },
   { label: "Charge time", value: "TODO(zach)" },
-  { label: "Charging cable", value: "TODO(zach) cable type" },
+  { label: "Charging cable", value: "USB charging cable, included" },
   { label: "Brightness output", value: "TODO(zach) lumens" },
   { label: "Delivery time", value: "TODO(zach) business days" },
 ];
@@ -95,3 +97,19 @@ export const moments = [
 
 export const aiNote =
   "Some lifestyle photos on this site are AI-generated to show how Glea is used. Product and color photos show the real light.";
+
+/** Maker's spec numbers (creator claims, Zach-verified, not lab-tested). */
+export const specStats = [
+  { n: 9, label: "LEDs" },
+  { n: 3, label: "Light colors" },
+  { n: 80, pre: "Up to", unit: " h", label: "Per charge" },
+  { n: 1000, unit: " mAh", label: "Battery" },
+  { n: 63, unit: " g", label: "Weight" },
+];
+
+/** Storytelling rows: lifestyle photo plus an overlapping feature card. */
+export const story = [
+  { photo: "APLUS-03", card: "FEAT-01", kicker: "Bend", heading: "Aim the glow at your words.", sub: "The flexible gooseneck bends so the glow lands right where you are reading." },
+  { photo: "APLUS-01", card: "FEAT-02", kicker: "Clip", heading: "Clips on. Stays put.", sub: "A strong spring clip holds it on your book, so your hands stay free for the pages." },
+  { photo: "APLUS-05", card: "FEAT-03", kicker: "Charge", heading: "Charge it, then read for nights.", sub: "Up to 80 hours per charge from a 1000mAh battery, by the maker's figures. Run time varies with brightness and light color." },
+];

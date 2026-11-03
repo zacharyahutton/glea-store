@@ -38,7 +38,7 @@ export function Header({ menu, help }: { menu: MenuItem[]; help: MenuItem[] }) {
 
   return (
     <>
-      <header className={`header${scrolled ? " is-scrolled" : ""}`}>
+      <header className={`header${scrolled ? " is-scrolled" : ""}${path === "/" && !scrolled ? " header--over" : ""}`}>
         <div className="container header__in">
           <div className="header__left">
             <button className="icon-btn menu-btn" aria-label="Open menu" aria-expanded={navOpen} aria-controls="mobile-nav" onClick={() => setNav(true)}>

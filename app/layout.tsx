@@ -1,5 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { DM_Sans, Fraunces } from "next/font/google";
+import { Marquee } from "@/components/home/Showcase";
+import { Reveal } from "@/components/motion/Reveal";
 import Link from "next/link";
 import "./globals.css";
 import { shopify } from "@/lib/shopify";
@@ -44,9 +46,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
       <body>
         <a href="#main" className="skip">Skip to content</a>
         <CartProvider>
-          <div className="ann">
-            <p>Free US shipping on orders over ${site.freeShippingThreshold} · <Link href={`/products/${site.productHandle}`}>Buy 2, save ${site.bundle.save}</Link></p>
-          </div>
+          <Marquee />
           <Header menu={main?.items ?? []} help={help?.items ?? []} />
           <main id="main">{children}</main>
           <Footer shop={shopLinks} help={help?.items ?? []} policies={policies} />
@@ -54,6 +54,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
           <Popup image={popupImg ? { src: popupImg.src, alt: popupImg.alt, w: popupImg.w, h: popupImg.h } : null} />
           <Chat />
           <Analytics />
+          <Reveal />
         </CartProvider>
         <JsonLd
           data={{
