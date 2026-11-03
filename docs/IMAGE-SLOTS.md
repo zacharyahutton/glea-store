@@ -99,7 +99,7 @@ Filename-driven, like the image slots. Files live in `public/media/video/`:
 | `videos.json` | Poster sizes and alt text, written by the script | |
 
 - The home hero uses base `glea-hero` with still slot `HERO-01`: `<VideoSlot base="glea-hero" still="HERO-01" priority />`.
-- Video rules: muted, loop, playsInline, preload none, no audio track, aria-hidden. The file is attached only after page load + browser idle, picked once by screen width (767px and below = mobile file). It fades in over .3s when it starts playing, pauses when off screen, and has a pause / play button (bottom left).
+- Video rules: muted, loop, playsInline, preload none, no audio track, aria-hidden. The file is attached only after page load + browser idle, picked once by screen width (767px and below = mobile file). It fades in over .3s when it starts playing and pauses when off screen. No on-screen pause button (removed in T-052 at the owner's request, as on Loftie); reduced-motion users never get the video.
 - prefers-reduced-motion or Save-Data: no video is loaded; the poster stays.
 - Missing mp4: the slot shows the still image slot (HERO-01) instead, and no video tag is rendered. A load error at runtime leaves the poster showing.
 - Adding or replacing a clip: encode, drop it in, run the script, commit (only committed files deploy):
@@ -109,3 +109,17 @@ Filename-driven, like the image slots. Files live in `public/media/video/`:
 
 ## Hero product (T-051)
 `public/media/glea-hero-product.webp`: transparent cutout of the White light (from glea-cut-hero-white-lit), standing at the bottom center of the home hero. Rebuild with `python3 scripts/hero-product-cutout.py glea-cut-hero-white-lit 10 public/media/glea-hero-product.webp`. If the file is missing, the hero shows no product.
+
+## Card hover images and hero frame (T-052)
+Filename-driven; drop the file in `/workspace/eco/glea-renders/`, run `node scripts/import-renders.mjs` (writes WebP to `public/media/`), commit.
+
+| Slot file | Where | Size / ratio | Notes | Fallback when missing |
+|---|---|---|---|---|
+| `glea-hover-black` (first), `glea-hover-amber`, `glea-hover-pink`, `glea-hover-purple`, `glea-hover-lakeblue`, `glea-hover-white` | Hover image on each color card (collection, search, PDP "more colors") and `glea-hover-black` on the home "Glea book light" card | 4:5 (e.g. 1600x2000), transparent not required | No person. Same scene as the card image, closer | Card: the color studio photo `glea-var-<color>-1100`, else the lit cutout. Home card: `glea-life-nightstand` |
+| `glea-hover-pair` | Hover image on the home "Buy 2" card | 4:5 | Two lights, closer | `glea-cut-pair-black-white` |
+| `hero-frame-01-16x9` | Approved first hero frame: hero video poster (desktop) and the still fallback (also for a 2.5D parallax still) | 1920x1080 | Preloaded LCP image | Video first-frame poster `video/glea-hero-d.webp`, else HERO-01 still |
+| `hero-frame-01-9x16` | Same, mobile | 1080x1920 | | Desktop frame, else `video/glea-hero-m.webp`, else HERO-01 |
+
+Hover behavior (measured on loftie.com, T-052): the second image sits on top at opacity 0 and crossfades in, opacity .4s ease-in-out while the first fades out; no zoom while swapping. Only on fine pointers (mouse); touch shows the first image. Keyboard focus on the card also swaps. Cards with no second image keep the soft 1.03 zoom.
+
+Hero video exports (incoming): mp4 H.264, 1920x1080 (`glea-hero-d.mp4`) and 1080x1920 (`glea-hero-m.mp4`), under 6 MB each, muted (no audio track), with poster (= hero-frame-01). Put them in `public/media/video/` and run `node scripts/import-videos.mjs`.
