@@ -1,0 +1,13 @@
+{
+  shop { name email currencyCode primaryDomain { url host }
+    shopPolicies { type title body url } }
+  products(first: 50, query: "status:active") { nodes { id handle title vendor productType tags descriptionHtml updatedAt
+    seo { title description }
+    options { name optionValues { name swatch { color } } }
+    media(first: 30) { nodes { mediaContentType alt preview { image { url altText width height } } } }
+    variants(first: 50) { nodes { id title sku price compareAtPrice availableForSale selectedOptions { name value } image { url altText width height } } } } }
+  collections(first: 20) { nodes { id handle title description descriptionHtml products(first: 50) { nodes { handle } } } }
+  pages(first: 50) { nodes { handle title body bodySummary isPublished updatedAt } }
+  blogs(first: 5) { nodes { handle title articles(first: 50) { nodes { handle title body summary publishedAt isPublished tags image { url altText width height } author { name } } } } }
+  menus(first: 10) { nodes { handle title items { title url items { title url } } } }
+}
