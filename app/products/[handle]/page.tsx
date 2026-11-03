@@ -4,7 +4,7 @@ import { notFound } from "next/navigation";
 import { shopify } from "@/lib/shopify";
 import { site, slugify } from "@/lib/site";
 import { faqs, features, known } from "@/lib/content";
-import { gallerySlots, type SlotName } from "@/lib/media";
+import { gallerySlots, featureSlots, type SlotName } from "@/lib/media";
 import { resolveColorImages, resolveSlot } from "@/lib/media-server";
 import { ProductView, type ColorMedia, type Slide } from "@/components/product/ProductView";
 import { ColorCard, colorOf } from "@/components/product/ColorCard";
@@ -42,12 +42,13 @@ export default async function ProductPage({ params }: { params: Promise<{ handle
   const localImgs: Slide[] = gallerySlots
     .map((s) => resolveSlot(s))
     .filter((x): x is NonNullable<typeof x> => !!x)
-    .map((r) => ({ src: r.src, alt: r.alt, w: r.w, h: r.h }));
-  const shared = shopifyImgs.length ? shopifyImgs : localImgs;
+    .map((r) => ({ src: r.src, alt: r.alt, w: r.w, h: r.h, note: r.note }));
+  // Final local photo set (in brand order) wins over Shopify product media; Shopify images are the fallback.
+  const shared = localImgs.length ? localImgs : shopifyImgs;
   const colorMedia: ColorMedia = {};
   for (const v of product.variants) {
     const c = colorOf(v);
-    colorMedia[slugify(c)] = resolveColorImages(slugify(c)).map((src, i) => ({ src, alt: `${product.title} in ${c}${i ? `, view ${i + 1}` : ""}`, w: 1200, h: 1200 }));
+    colorMedia[slugify(c)] = resolveColorImages(slugify(c)).map((src, i) => ({ src, alt: `${product.title} in ${c}${i ? `, view ${i + 1}` : ""}`, w: 1100, h: 1100 }));
   }
   const pdpFaq = known(faqs).filter((f) => f.topic !== "help").slice(0, 8);
   const url = `${site.url}/products/${product.handle}`;
@@ -83,6 +84,17 @@ export default async function ProductPage({ params }: { params: Promise<{ handle
           </div>
         </ProductView>
       </div>
+
+      <section className="sec sec--white" aria-labelledby="feat-title">
+        <div className="container">
+          <div className="sec-head"><div><span className="kicker">Features</span><h2 id="feat-title" className="h2">Made for reading after dark</h2></div></div>
+          <div className="grid grid-4">
+            {featureSlots.map((s) => (
+              <div className="frame ratio-1" key={s}><Media slot={s} sizes="(min-width: 1024px) 25vw, (min-width: 600px) 50vw, 100vw" /></div>
+            ))}
+          </div>
+        </div>
+      </section>
 
       <section className="sec" id="how-it-works" aria-labelledby="how-title">
         <div className="container">

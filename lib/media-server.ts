@@ -10,13 +10,13 @@ export function mediaExists(file: string) {
   return cache.get(file)!;
 }
 
-export type ResolvedImage = { src: string; alt: string; w: number; h: number; mobile?: { src: string; w: number; h: number } } | null;
+export type ResolvedImage = { src: string; alt: string; w: number; h: number; note?: string; mobile?: { src: string; w: number; h: number } } | null;
 
 export function resolveSlot(name: SlotName): ResolvedImage {
-  const s = slots[name] as (typeof slots)[SlotName] & { mobile?: string; mw?: number; mh?: number };
+  const s = slots[name] as (typeof slots)[SlotName] & { mobile?: string; mw?: number; mh?: number; note?: string };
   if (!mediaExists(s.file)) return null;
   const mobile = s.mobile && mediaExists(s.mobile) ? { src: `/media/${s.mobile}`, w: s.mw ?? s.w, h: s.mh ?? s.h } : undefined;
-  return { src: `/media/${s.file}`, alt: s.alt, w: s.w, h: s.h, mobile };
+  return { src: `/media/${s.file}`, alt: s.alt, w: s.w, h: s.h, note: s.note, mobile };
 }
 
 export function resolveColorImages(slug: string): string[] {

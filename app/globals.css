@@ -444,3 +444,4 @@ body.has-sticky .chat-fab { bottom: 88px; }
 /* Empty states, notices */
 .empty { display: grid; justify-items: center; gap: 14px; text-align: center; padding: clamp(40px, 8vw, 96px) 16px; max-width: 560px; margin-inline: auto; }
 .notice { padding: 16px 20px; border-radius: var(--r-card); background: var(--tint); font-size: 0.9375rem; }
+.gal__note { position: absolute; bottom: 12px; left: 12px; font-size: 0.75rem; background: rgba(20, 22, 31, 0.78); color: var(--page); padding: 4px 8px; border-radius: var(--r-sm); }

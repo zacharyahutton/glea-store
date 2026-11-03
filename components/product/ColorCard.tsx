@@ -9,10 +9,10 @@ export const colorOf = (v: Variant) => v.selectedOptions.find((o) => o.name.toLo
 export const swatchFor = (p: Product, c: string) =>
   p.options.find((o) => o.name.toLowerCase() === "color")?.optionValues.find((o) => o.name === c)?.swatch?.color ?? swatchFallback[c.toLowerCase()] ?? "#ccc";
 
-/** One card per color variant. Photo comes from the variant image or /public/media/glea-color-<slug>.webp. */
+/** One card per color variant. Photo comes from /public/media/glea-var-<slug>-1100.webp, else the Shopify variant image. */
 export function ColorCard({ product, variant, sizes = "(min-width: 990px) 25vw, 50vw" }: { product: Product; variant: Variant; sizes?: string }) {
   const c = colorOf(variant);
-  const src = variant.image?.url ?? resolveColorImages(slugify(c))[0];
+  const src = resolveColorImages(slugify(c))[0] ?? variant.image?.url;
   return (
     <Link className="pcard" href={`/products/${product.handle}?color=${encodeURIComponent(c)}`}>
       <div className="pcard__media">

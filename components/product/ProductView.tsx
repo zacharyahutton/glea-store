@@ -8,7 +8,7 @@ import { Placeholder } from "../ui/Placeholder";
 import { formatMoney, site, swatchFallback, slugify } from "@/lib/site";
 import { track } from "@/lib/analytics";
 
-export type Slide = { src: string; alt: string; w: number; h: number } | { placeholder: true; label: string; color?: string };
+export type Slide = { src: string; alt: string; w: number; h: number; note?: string } | { placeholder: true; label: string; color?: string };
 export type ColorMedia = Record<string, { src: string; alt: string; w: number; h: number }[]>;
 
 const colorOf = (v: Variant) => v.selectedOptions.find((o) => o.name.toLowerCase() === "color")?.value ?? v.title;
@@ -95,8 +95,9 @@ export function ProductView({ product, shared, colorMedia, initialColor, childre
             {"placeholder" in slide ? (
               <Placeholder label={`${slide.label}`} color={slide.color} note="Color photo coming soon" />
             ) : (
-              <Image src={slide.src} alt={slide.alt} width={slide.w} height={slide.h} sizes="(min-width: 990px) 55vw, 100vw" priority={idx <= 1} />
+              <Image src={slide.src} alt={slide.alt} width={slide.w} height={slide.h} sizes="(min-width: 990px) 55vw, 100vw" priority={idx === 0} />
             )}
+            {!("placeholder" in slide) && slide.note ? <span className="gal__note">{slide.note}</span> : null}
             {slides.length > 1 ? (
               <>
                 <button className="gal__nav gal__nav--prev" aria-label="Previous photo" onClick={() => go(idx - 1)}><Icon name="left" size={20} /></button>
